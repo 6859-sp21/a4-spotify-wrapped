@@ -31,6 +31,16 @@ p {
     <head></head>
   <body>
     <h1>Spotify: The Beatles Acousticness and Danceability</h1>
+    <label for="artist-select">Choose an artist:</label>
+    
+    <!-- <select name="artist-list" id="artist-select">
+        <option value="Elvis Presley">Elvis Presley</option>
+        <option value="The Rolling Stones">The Rolling Stones</option> 
+        <option value="The Beatles">The Beattles</option>
+        <option value="Queen">Queen</option>
+        <option value="Ignacio Corsini">Ignacio Corsini</option>
+    </select> -->
+    <div id="artists-list"></div>
     <div id="chart"></div>
   </body>
 
@@ -47,7 +57,60 @@ p {
           .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
-      d3.csv("the_beatles_filtered.csv", d3.autoType).then(function(data){
+      d3.csv("multiple_artists.csv", d3.autoType).then(function(data){
+        // Select artists-lists made and get artists
+        var dropDown = d3.select("#artists-list").append("select")
+                  .attr("name", "artists");
+
+        var artist_data = [ {'value': "Elvis Presley"}, {'value': "The Rolling Stones"}, {'value': "The Beatles"}, {'value': "Queen"}, {'value': "Ignacio Corsini"} ]
+
+        var options = dropDown.selectAll("option")
+               // taking key values 
+               .data(artist_data) // eg., data = [ {'value': 10}, {'value': 11}, {'value': 12} ]
+               .enter()
+               .append("option");
+
+        // Uses variable options --> artist_data is pulled 
+        options.text(function (d) { return d.value; })
+               .attr("value", function (d) { return d.value; });
+        
+        function click(d) {
+
+            if (active === d) return reset();
+            g.selectAll(".active").classed("active", false);
+            d3.select("#" + d.properties.artists).classed("active", active = d); // changed selection to id
+
+            var b = path.bounds(d);
+
+            g.transition().duration(1000).attr("transform",
+                "translate(" + projection.translate() + ")"
+                + "scale(" + .95 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h) + ")"
+                + "translate(" + -(b[1][0] + b[0][0]) / 2 + "," + -(b[1][1] + b[0][1]) / 2 + ")");
+        }
+        
+        function menuChanged() {
+
+            var selectedValue = event.target.value;  
+
+            data.forEach(function (d) { 
+                // console.log("Selected value:", selectedValue)
+                // console.log("This is d:", d)
+                // console.log(JSON.parse(d.artists).value)
+
+                // console.log("PRINTING:", d.artists.substring(2, d.artists.length - 2))
+
+                if (selectedValue === d.artists.substring(2, d.artists.length - 2)) {
+                    // console.log("hello")
+                    // alert(selectedValue)
+
+                    click(d);
+                };
+            })
+        }
+
+        dropDown.on("change", menuChanged);
+
+
 
         var keys = data.columns.slice(1,3)
 
