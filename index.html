@@ -35,8 +35,8 @@ p {
   </body>
 
   <script>
-      const height = window.innerHeight;
-      const width = window.innerWidth;
+      const height = 500 //window.innerHeight;
+      const width = 1000 //window.innerWidth;
       const margin = ({top: 50, right: 50, bottom: 100, left: 50})
 
       var svg = d3.select("#chart")
@@ -51,10 +51,10 @@ p {
 
         var keys = data.columns.slice(1,3)
 
-        var x = d3.scaleTime()
+        var x = d3.scaleUtc()
           .domain(d3.extent(data, d => d.release_date))
           .range([margin.left, width - margin.right]);
-        svg.append("g")
+        var xAxis = svg.append("g")
           .attr("transform", `translate(0,${height - margin.bottom})`)
           .call(d3.axisBottom(x).ticks(width / 30).tickSizeOuter(0))
           .select(".domain").remove()
@@ -67,9 +67,18 @@ p {
           .attr("y", height-30 )
           .text("Time (year)");
 
+        // svg.append("text")
+        //   .attr("text-anchor", "end")
+        //   .attr("x", w0)
+        //   .attr("y", -20 )
+        //   .text("Test")
+        //   .attr("text-anchor", "start");
+
         var y = d3.scaleLinear()
           .domain([0,1])
           .range([height - margin.bottom, margin.top])
+        svg.append("g")
+          .call(d3.axisLeft(y).ticks(5))
 
         var color = d3.scaleOrdinal()
           .domain(keys) // Slices off the release date column 
@@ -107,84 +116,135 @@ p {
           d3.selectAll(".myArea").style("opacity", 1).style("stroke", "none")
         }
 
-        var area = d3.area()
-          .x(d => x(d.data.release_date))
-          .y0(d => y(d[0]))
-          .y1(d => y(d[1]))  
-          .curve(d3.curveMonotoneX);
-
         // Trying to add brushing and clippiing
 
-  //       var clip = svg.append("defs").append("svg:clipPath")
-  //     .attr("id", "clip")
-  //     .append("svg:rect")
-  //     .attr("width", width )
-  //     .attr("height", height )
-  //     .attr("x", 0)
-  //     .attr("y", 0);
+        var clip = svg.append("defs").append("svg:clipPath")
+          .attr("id", "clip")
+          .append("svg:rect")
+          .attr("width", width )
+          .attr("height", height )
+          .attr("x", 0)
+          .attr("y", 0);
 
 
-  //               // Add brushing
-  // var brush = d3.brushX()                 // Add the brush feature using the d3.brush function
-  //     .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-  //     .on("end", updateChart) // Each time the brush selection changes, trigger the 'updateChart' function
+                // Add brushing
+  var brush = d3.brushX()                 // Add the brush feature using the d3.brush function
+      .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+      .on("end", updateChart) // Each time the brush selection changes, trigger the 'updateChart' function
 
-  // // Create the scatter variable: where both the circles and the brush take place
-  // var areaChart = svg.append('g')
-  //   .attr("clip-path", "url(#clip)")
 
-  //         areaChart
-  //   .selectAll("mylayers")
-  //   .data(series)
-  //   .enter()
-  //   .append("path")
-  //     .attr("class", function(d) { return "myArea " + d.key })
-  //     .style("fill", function(d) { return color(d.key); })
-  //     .attr("d", area)
+  // Create the scatter variable: where both the circles and the brush take place
+  var areaChart = svg.append('g')
+    .attr("clip-path", "url(#clip)")
 
-  // // Add the brushing
-  // areaChart
-  //   .append("g")
-  //     .attr("class", "brush")
-  //     .call(brush);
+    var area = d3.area()
+          .x(d => x(d.data.release_date))
+          .y0(d => y(d[0] - d[0]))
+          .y1(d => y(d[1] - d[0]))  
+          .curve(d3.curveMonotoneX);
 
-  //     var idleTimeout
-  // function idled() { idleTimeout = null; }
-
-  // // A function that update the chart for given boundaries
-  // function updateChart() {
-
-  //   extent = d3.event.selection
-
-  //   // If no selection, back to initial coordinate. Otherwise, update X axis domain
-  //   if(!extent){
-  //     if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-  //     x.domain(d3.extent(data, function(d) { return d.release_date; }))
-  //   }else{
-  //     x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
-  //     areaChart.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
-  //   }
-
-  //   // Update axis and area position
-  //   xAxis.transition().duration(1000).call(d3.axisBottom(x).ticks(10))
-  //   areaChart
-  //     .selectAll("path")
-  //     .transition().duration(1000)
-  //     .attr("d", area)
-  //   }
-
-//uncomment svg if brushing doesn't work
-        svg
+          areaChart
           .selectAll("mylayers")
           .data(series)
           .enter()
-          .append("path")
-          .attr("class", "myArea")
-          .style("fill", function(d) { return color(d.key); })
-          .attr("d", area)
-          .on("mouseover", mouseover)
-          .on("mousemove", mousemove)
-          .on("mouseleave", mouseleave)
+            .append("path")
+            .attr("class", function(d) { return "myArea " + d.key })
+            .style("fill", function(d) { return color(d.key); })
+            .attr("d", area)
+
+  // // Add the brushing
+  areaChart
+    .append("g")
+      .attr("class", "brush")
+      .call(brush);
+
+      var idleTimeout
+  function idled() { idleTimeout = null; }
+
+  // A function that update the chart for given boundaries
+  function updateChart(event, d) {
+    extent = event.selection
+
+    // If no selection, back to initial coordinate. Otherwise, update X axis domain
+    if(!extent){
+      if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
+      x.domain(d3.extent(data, function(d) { return d.release_date; }))
+    }else{
+      x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
+      areaChart.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+    }
+
+    // Update axis and area position
+    xAxis.transition().duration(1000).call(d3.axisBottom(x).ticks(10))
+    areaChart
+      .selectAll("path")
+      .transition().duration(1000)
+      .attr("d", area)
+    }
+
+  //   //////////
+  //   // HIGHLIGHT GROUP //
+  //   //////////
+
+  //   // What to do when one group is hovered
+    var highlight = function(d){
+      console.log(d)
+      // reduce opacity of all groups
+      d3.selectAll(".myArea").style("opacity", .1)
+      // expect the one that is hovered
+      d3.select("."+d).style("opacity", 1)
+    }
+
+    // And when it is not hovered anymore
+    var noHighlight = function(d){
+      d3.selectAll(".myArea").style("opacity", 1)
+    }
+
+//uncomment svg if brushing doesn't work
+        // svg
+        //   .selectAll("mylayers")
+        //   .data(series)
+        //   .enter()
+        //   .append("path")
+        //   .attr("class", "myArea")
+        //   .style("fill", function(d) { return color(d.key); })
+        //   .attr("d", area)
+        //   .on("mouseover", mouseover)
+        //   .on("mousemove", mousemove)
+        //   .on("mouseleave", mouseleave)
+
+        //////////
+    // LEGEND //
+    //////////
+
+    // Add one dot in the legend for each name.
+    var size = 20
+    svg.selectAll("myrect")
+      .data(keys)
+      .enter()
+      .append("rect")
+        .attr("x", 400)
+        .attr("y", function(d,i){ return 10 + i*(size+5)}) // 100 is where the first dot appears. 25 is the distance between dots
+        .attr("width", size)
+        .attr("height", size)
+        .style("fill", function(d){ return color(d)})
+        .on("mouseover", highlight)
+        .on("mouseleave", noHighlight)
+
+    // Add one dot in the legend for each name.
+    svg.selectAll("mylabels")
+      .data(keys)
+      .enter()
+      .append("text")
+        .attr("x", 400 + size*1.2)
+        .attr("y", function(d,i){ return 10 + i*(size+5) + (size/2)}) // 100 is where the first dot appears. 25 is the distance between dots
+        .style("fill", function(d){ return color(d)})
+        .text(function(d){ return d})
+        .attr("text-anchor", "left")
+        .style("alignment-baseline", "middle")
+        .on("mouseover", highlight)
+        .on("mouseleave", noHighlight)
+
         
       })
       .catch(function(error){})
