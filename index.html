@@ -57,12 +57,29 @@ p {
           .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
+        function getArtistName(datum) {
+          return datum.artists.substring(2, datum.artists.length - 2)
+        }
+
+      function filterByArtist(data, artistName) {
+        return data.filter((d) => {
+          return artistName == getArtistName(d)
+          // console.log('artist is', artistName)
+        })
+
+      }
+
       d3.csv("multiple_artists.csv", d3.autoType).then(function(data){
+
         // Select artists-lists made and get artists
         var dropDown = d3.select("#artists-list").append("select")
                   .attr("name", "artists");
 
         var artist_data = [ {'value': "Elvis Presley"}, {'value': "The Rolling Stones"}, {'value': "The Beatles"}, {'value': "Queen"}, {'value': "Ignacio Corsini"} ]
+        var defaultArtist = artist_data[0].value;
+
+        let filteredData = filterByArtist(data, defaultArtist)
+        console.log(filteredData)
 
         var options = dropDown.selectAll("option")
                // taking key values 
@@ -87,6 +104,8 @@ p {
                 + "scale(" + .95 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h) + ")"
                 + "translate(" + -(b[1][0] + b[0][0]) / 2 + "," + -(b[1][1] + b[0][1]) / 2 + ")");
         }
+
+        
         
         function menuChanged() {
 
@@ -100,10 +119,10 @@ p {
                 // console.log("PRINTING:", d.artists.substring(2, d.artists.length - 2))
 
                 if (selectedValue === d.artists.substring(2, d.artists.length - 2)) {
-                    // console.log("hello")
+                    console.log(selectedValue)
                     // alert(selectedValue)
 
-                    click(d);
+                    // click(d);
                 };
             })
         }
@@ -117,29 +136,31 @@ p {
         var x = d3.scaleUtc()
           .domain(d3.extent(data, d => d.release_date))
           .range([margin.left, width - margin.right]);
+          
         var xAxis = svg.append("g")
           .attr("transform", `translate(0,${height - margin.bottom})`)
           .call(d3.axisBottom(x).ticks(width / 50).tickSizeOuter(0))
           .select(".domain").remove()
+
+    //  svg.append("g")
+    // .attr("transform", `translate(0,${height - margin.bottom})`)
+    // .call(d3.axisBottom(x).ticks(width / 30).tickSizeOuter(0)) // creates bottom horizontal axis 
+    // .select(".domain").remove()
+
         // Customization
         svg.selectAll(".tick line").attr("stroke", "#b8b8b8")
 
-        svg.append("text")
-          .attr("text-anchor", "end")
-          .attr("x", width)
-          .attr("y", height-30 )
-          .text("Time (year)");
-
         // svg.append("text")
         //   .attr("text-anchor", "end")
-        //   .attr("x", w0)
-        //   .attr("y", -20 )
-        //   .text("Test")
-        //   .attr("text-anchor", "start");
+        //   .attr("x", width)
+        //   .attr("y", height-30 )
+        //   .text("Time (year)");
+
 
         var y = d3.scaleLinear()
           .domain([0,1])
           .range([height - margin.bottom, margin.top])
+
         svg.append("g")
           .call(d3.axisLeft(y).ticks(5))
 
@@ -151,7 +172,7 @@ p {
           .keys(keys) 
           .offset(d3.stackOffsetSilhouette) 
           .order(d3.stackOrderInsideOut) 
-          (data)
+          (filteredData)
 
         var Tooltip = svg
           .append("text")
@@ -238,11 +259,11 @@ p {
     }
 
     // Update axis and area position
-    xAxis.transition().duration(1000).call(d3.axisBottom(x).ticks(10))
-    areaChart
-      .selectAll("path")
-      .transition().duration(1000)
-      .attr("d", area)
+    // xAxis.transition().duration(1000).call(d3.axisBottom(x).ticks(10))
+    // areaChart
+    //   .selectAll("path")
+    //   .transition().duration(1000)
+    //   .attr("d", area)
     }
 
   //   //////////
