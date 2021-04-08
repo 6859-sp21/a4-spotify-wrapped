@@ -1,0 +1,40 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+## This script will filter for songs by the Beattles
+
+# Load necessary packages
+library(skimr)
+library(tidyverse)
+```
+
+```{r}
+# Read in Spotify data
+spotify <- read_csv("data.csv") 
+glimpse(spotify)
+```
+
+```{r}
+#target = c("['The Beatles']", "['Queen']")
+# selected_artists = filter(spotify, artists == "['The Beatles']")
+
+# https://stackoverflow.com/questions/1686569/filter-data-frame-rows-by-a-logical-condition 
+selected_artists = spotify[spotify$artists %in% c("['The Beatles']", "['Queen']", "['Elvis Presley']", "['The Rolling Stones']", "['Ignacio Corsini']"), ]
+selected_artists
+
+```
+
+```{r}
+
+selected_artists_sorted = selected_artists[order(-selected_artists$year),]
+selected_artists_filtered = selected_artists_sorted[, c("acousticness", "danceability", "release_date", "artists")]
+```
+
+
+```{r}
+write.csv(selected_artists_filtered, 'multiple_artists.csv')
+```
+
