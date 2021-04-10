@@ -1,0 +1,102 @@
+---
+title: "Merge Datasets for Spotify"
+output: html_notebook
+---
+
+```{r}
+## This script will filter for songs by the Beattles
+
+# Load necessary packages
+library(skimr)
+library(tidyverse)
+```
+
+```{r}
+# Read in Spotify data
+spotify = read_csv("Spotify/data.csv") 
+glimpse(spotify)
+```
+
+```{r}
+# Read in hit predictor data
+dataset_of_00s = read_csv("Hit_Predictor/dataset-of-00s.csv") 
+dataset_of_10s = read_csv("Hit_Predictor/dataset-of-10s.csv") 
+dataset_of_60s = read_csv("Hit_Predictor/dataset-of-60s.csv") 
+dataset_of_70s = read_csv("Hit_Predictor/dataset-of-70s.csv") 
+dataset_of_80s = read_csv("Hit_Predictor/dataset-of-80s.csv") 
+dataset_of_90s = read_csv("Hit_Predictor/dataset-of-90s.csv") 
+
+```
+
+```{r}
+# Decades appended to distinguish
+hit_predictor_00s = data.frame(decade = "00s", dataset_of_00s)
+hit_predictor_10s = data.frame(decade = "10s", dataset_of_10s)
+hit_predictor_60s = data.frame(decade = "60s", dataset_of_60s)
+hit_predictor_70s = data.frame(decade = "70s", dataset_of_70s)
+hit_predictor_80s = data.frame(decade = "80s", dataset_of_80s)
+hit_predictor_90s = data.frame(decade = "90s", dataset_of_90s)
+
+# Vertically join the hit predictor datasets
+bind_hit_predictor = bind_rows(hit_predictor_00s, hit_predictor_10s, hit_predictor_60s, hit_predictor_70s, hit_predictor_80s, hit_predictor_90s)
+
+bind_hit_predictor
+```
+```{r}
+# Get rid of spotify:track: substring in hit predictor dataset
+# Aka replace the first 14 characters with an empty string
+bind_hit_predictor$uri = gsub("^.{0,14}", "", bind_hit_predictor$uri)
+
+# Get rid of the bracket and quote around artists in spotify
+spotify$artists = gsub("\\[|\\]", "", spotify$artists)
+spotify$artists = gsub("'", "", spotify$artists)
+spotify$artists = gsub('"', "", spotify$artists)
+```
+
+```{r}
+# Rename the uri column to "id" so it matches Spotify dataset
+# names(df) looks into all the names in data frame df
+# [names(df) == old.var.name] extracts the variable name you want to check
+# <- 'new.var.name' assigns the new variable name
+names(bind_hit_predictor)[names(bind_hit_predictor) == 'uri'] = 'id'
+names(bind_hit_predictor)[names(bind_hit_predictor) == 'track'] = 'name'
+```
+
+```{r}
+# Merge bind_hit_predictor and spotify by ID column
+merged_spotify = merge(bind_hit_predictor, spotify, by = "id")
+merged_data_filtered = merged_spotify[, c("id", "decade", "name.x", "artist", 
+                                   "danceability.x", "energy.x", "key.x", "loudness.x", 
+                                   "mode.x", "speechiness.x", "acousticness.x", "instrumentalness.x", 
+                                   "liveness.x", "valence.x", "tempo.x", "duration_ms.x", 
+                                   "time_signature", "chorus_hit", "sections", "target", 
+                                   "explicit", "popularity", "release_date", "year")]
+
+# Rename some columns
+names(merged_data_filtered)[names(merged_data_filtered) == 'name.x'] = 'name'
+names(merged_data_filtered)[names(merged_data_filtered) == 'danceability.x'] = 'danceability'
+names(merged_data_filtered)[names(merged_data_filtered) == 'energy.x'] = 'energy'
+names(merged_data_filtered)[names(merged_data_filtered) == 'key.x'] = 'key'
+names(merged_data_filtered)[names(merged_data_filtered) == 'loudness.x'] = 'loudness'
+names(merged_data_filtered)[names(merged_data_filtered) == 'mode.x'] = 'mode'
+names(merged_data_filtered)[names(merged_data_filtered) == 'speechiness.x'] = 'speechiness'
+names(merged_data_filtered)[names(merged_data_filtered) == 'acousticness.x'] = 'acousticness'
+names(merged_data_filtered)[names(merged_data_filtered) == 'instrumentalness.x'] = 'instrumentalness'
+names(merged_data_filtered)[names(merged_data_filtered) == 'liveness.x'] = 'liveness'
+names(merged_data_filtered)[names(merged_data_filtered) == 'valence.x'] = 'valence'
+names(merged_data_filtered)[names(merged_data_filtered) == 'tempo.x'] = 'tempo'
+names(merged_data_filtered)[names(merged_data_filtered) == 'duration_ms.x'] = 'duration_ms'
+
+```
+
+```{r}
+skim(merged_data_filtered)
+
+hist(merged_data_filtered$year)
+```
+
+```{r}
+write.csv(merged_data_filtered, 'merged_datasets.csv')
+```
+
+
