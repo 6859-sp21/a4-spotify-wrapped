@@ -2,6 +2,10 @@
 <meta charset="utf-8">
 <script src="https://d3js.org/d3.v6.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <!-- Boostrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 <html>
   <style>
@@ -22,6 +26,31 @@
   <body>
     <label for="artist-select">Choose an artist:</label>
     <div id="artists-list"></div>
+    <div id="hit-or-flop">
+      <h2>Guess if the song was a hit or a flop!</h3>
+      <p>A song is a "hit" if it appeared in Billboards Hot-100 tracks in the decade</p>
+      <h3>The song is: <span id="song-title"></span></h3>
+      <h4>Your Guess:
+        <button type="button" id="hit" class="btn btn-success" onClick="isHit(true)">Hit</button>
+        <button type="button" id="flop" class="btn btn-danger" onClick="isHit(false)">Flop</button>
+      </h4>
+      <!-- next step: If result is not empty, show "New Song" button for generating another new song? Or just always have a new song button available so users can skip if they want -->
+      <div id="result"></div>
+      <a href="#" data-toggle="tooltip" title="Hooray!">Hover over me</a>
+      <a href="#" data-bs-toggle="tooltip" title="Some tooltip text!">Hover over me</a>
+      <div class="tooltip bs-tooltip-top" role="tooltip">
+        <div class="tooltip-arrow"></div>
+        <div class="tooltip-inner">
+          Some tooltip text!
+        </div>
+      </div>
+
+
+      <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom">
+        Tooltip on bottom
+      </button>
+
+    </div>
     <div id="chart"></div>
     <p><strong>References: </strong></p>
     <a href="https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks">Dataset</a><br>
@@ -31,8 +60,16 @@
     <a href="https://github.com/d3/d3-scale-chromatic/blob/master/README.md">Color Scheme</a> <br>
     <br>
   </body>
-
+  <script src="js/hit_flop.js"></script>
   <script>
+
+// trying to get tooltips to work
+$(document).ready(function () {
+     if ($("[rel=tooltip]").length) {
+     $("[rel=tooltip]").tooltip();
+     }
+   });
+
       const height = 800 //window.innerHeight;
       const width = 1200 //window.innerWidth;
       const margin = ({top: 50, right: 50, bottom: 100, left: 50})
@@ -56,7 +93,12 @@
 
       // }
 
-      d3.csv("the_beatles_filtered.csv", d3.autoType).then(function(data){
+
+      d3.csv("merged_datasets.csv", d3.autoType).then(function(data){
+        console.log(data)
+
+        var song = getRandomSong(data)
+        console.log(song)
 
         // Select artists-lists made and get artists
         var dropDown = d3.select("#artists-list").append("select")
