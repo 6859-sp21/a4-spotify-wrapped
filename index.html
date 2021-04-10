@@ -79,6 +79,8 @@
   </body>
 
   <script>
+
+    //*********************************************CONSTANTS*****************************
     const height = 1000; //window.innerHeight;
     const width = 1000; //window.innerWidth;
     const margin = { top: 50, right: 50, bottom: 100, left: 50 };
@@ -97,7 +99,9 @@
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    // d3.csv("multiple_artists.csv", d3.autoType).then(function(data){
+
+
+    //*********************************************LOADING DATA*****************************
     d3.csv("data_bands.csv", function (data) {
       console.log(data);
 
