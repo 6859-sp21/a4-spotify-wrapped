@@ -2,6 +2,7 @@
 <meta charset="utf-8">
 <script src="https://d3js.org/d3.v6.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
     <!-- Boostrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -15,6 +16,43 @@
 
     #chart {
       background: white;
+    }
+
+    .circularBar {
+      fill: mediumaquamarine;
+    }
+
+    .circularBar:hover {
+      fill: darkgreen;
+    }
+
+    .circularBarTip {
+      line-height: 1;
+      font-weight: bold;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      border-radius: 2px;
+    }
+
+    /* Creates a small triangle extender for the tooltip */
+    .circularBarTip:after {
+      box-sizing: border-box;
+      display: inline;
+      font-size: 10px;
+      width: 100%;
+      line-height: 1;
+      color: rgba(0, 0, 0, 0.8);
+      content: "\25BC";
+      position: absolute;
+      text-align: center;
+    }
+
+    /* Style northward tooltips differently */
+    .dcircularBarTip.n:after {
+      margin: -1px 0 0 0;
+      top: 100%;
+      left: 0;
     }
 
 
@@ -151,32 +189,40 @@
   </body>
   <script src="js/hit_flop.js"></script>
   <script>
+    const FEATURES_OF_INTEREST = ['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'speechiness', 'valence']
+
+  //   var tip = d3.tip()
+  //         .attr('class', 'circularBarTip')
+  //         .offset([-10, 0])
+  //         .html(function(d) {
+  //   return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";
+  //   var svg = d3.select("body").append("svg")
+  //   .attr("width", width + margin.left + margin.right)
+  //   .attr("height", height + margin.top + margin.bottom)
+  // .append("g")
+  //   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  //   svg.call(tip)
 
 // trying to get tooltips to work
       d3.csv("merged_datasets.csv", d3.autoType).then(function(data){
-
+        var song = getRandomSong(data)
         var nextSongElement = document.getElementById('next')
           nextSongElement.addEventListener('click', () => {
-            getRandomSong(data)
+            song = getRandomSong(data)
+            updateCircularBarplot(song)
           })
         console.log(data)
 
-        var song = getRandomSong(data)
+        // var song = getRandomSong(data)
         console.log(song)
+
+        // makeCircularBarplot(song)
 
         songTitles = data.map(d => d.name)
         console.log(songTitles)
-        // makeCircularBarplot(song)
-        //todo: autocomplete input box
         
-      })
-      .catch(function(error){})
-
-      function makeCircularBarplot(song) {
-        console.log('in make circular barplot')
-        console.log(song)
-
-        var transformedData = transformSongFeatureData(song, ['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'speechiness', 'valence'])
+        // Make circular barplot
+        var transformedData = transformSongFeatureData(song, FEATURES_OF_INTEREST)
         console.log(transformedData)
                   // set the dimensions and margins of the graph
         var margin = {top: 100, right: 0, bottom: 0, left: 0},
@@ -192,6 +238,13 @@
             .attr("height", height + margin.top + margin.bottom)
           .append("g")
             .attr("transform", "translate(" + (width / 2 + margin.left) + "," + (height / 2 + margin.top) + ")");
+          
+          svg.append("text")
+            .attr("x", 0)
+            .attr("y", (0-margin.top)*2.5)
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .text(`Audio Features of ${song.name}`)   
 
         // Scales
         var x = d3.scaleBand()
@@ -203,12 +256,12 @@
             .domain([0, 1]); // Domain of Y is from 0 to the max seen in the data
 
         // Add the bars
-        svg.append("g")
+        var bars = svg.append("g")
           .selectAll("path")
           .data(transformedData)
           .enter()
           .append("path")
-            .attr("fill", "#69b3a2")
+            .attr("class", 'circularBar')
             .attr("d", d3.arc()     // imagine your doing a part of a donut plot
                 .innerRadius(innerRadius)
                 .outerRadius(function(d) { return y(d['value']); })
@@ -230,7 +283,45 @@
               .attr("transform", function(d) { return (x(d.feature) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)"; })
               .style("font-size", "11px")
               .attr("alignment-baseline", "middle")
+
+        
+      function updateCircularBarplot(newSong) {
+        console.log('in update circular barplot, new song is')
+        console.log(newSong)
+        let updatedData = transformSongFeatureData(newSong, FEATURES_OF_INTEREST)
+        console.log(updatedData)
+
+        bars
+          .data(updatedData)
+          .transition()
+          .duration(1000)
+          .attr("d", d3.arc()     // imagine your doing a part of a donut plot
+            .innerRadius(innerRadius)
+            .outerRadius(function(d) { 
+              console.log('in outer radius', d['value'])
+              
+              return y(d['value']); })
+            .startAngle(function(d) { return x(d.feature); })
+            .endAngle(function(d) { return x(d.feature) + x.bandwidth(); })
+            .padAngle(0.01)
+            .padRadius(innerRadius))
+            
+        // update song name in the chart title
+        svg.select("text")
+          .text(`Audio Features of ${song.name}`) 
+        
+        svg
+          .data(transformedData)
+          .transition()
+          .duration(1000)
+          // .attr("text-anchor", function(d) { return (x(d.feature) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
+          //     .attr("transform", function(d) { return "rotate(" + ((x(d.feature) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")"+"translate(" + (y(d['value'])+10) + ",0)"; })
+          //     .text(function(d){return(d.feature)})
+          //     .attr("transform", function(d) { return (x(d.feature) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)"; })
+
       }
+    }).catch((e) => {})
+        
 
       function makeArtist(song, data){
         let artist_list = data.filter(function (s) {
@@ -324,6 +415,11 @@ svg.append("g")
       });
       }
 
+        //todo: autocomplete input box
+
+
+        
+      
 
 function transformSongFeatureData(song, featuresOfInterest) {
   var output = []
