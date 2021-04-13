@@ -20,6 +20,7 @@ function getRandomSong(data) {
   const songElement = document.getElementById("song-title");
   songElement.innerHTML = `${songTitle} by ${artist}`;
   makeCircularBarplot(chosenSong);
+  makeArtist(chosenSong, data);
   return datum;
 }
 
