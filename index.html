@@ -13,45 +13,41 @@
       font: 15px helvetica;
     }
 
-#chart { 
-  background: white;
-}
+    #chart {
+      background: white;
+    }
+
+
   </style>
     <head>
       <h1>Spotify: The Beatles Acousticness and Danceability</h1>
-
-      
-      
     </head>
-  <body>
-    <label for="artist-select">Choose an artist:</label>
-    <div id="artists-list"></div>
+  <body class="container-fluid">
+
+
     <div id="hit-or-flop">
       <h2>Guess if the song was a hit or a flop!</h3>
       <p>A song is a "hit" if it appeared in Billboards Hot-100 tracks in the decade</p>
-      <h3>The song is: <span id="song-title"></span></h3>
-      <h4>Your Guess:
+      <h3>Current song: <span id="song-title"></span></h3>
+      <!-- <div id="song-search-box" class='input-group input-group-lg'>
+        <input type="text" id="song-search" >
+      </div> -->
+      <div id="song-search-box"  class="input-group input-group-lg">
+        <input type="text" class="form-control" aria-label="Large" placeholder="Search for a song">
+      </div>
+
+      <h4 style="margin-top: 5px">Your Guess:
         <button type="button" id="hit" class="btn btn-success" onClick="isHit(true)">Hit</button>
         <button type="button" id="flop" class="btn btn-danger" onClick="isHit(false)">Flop</button>
       </h4>
-      <!-- next step: If result is not empty, show "New Song" button for generating another new song? Or just always have a new song button available so users can skip if they want -->
       <div id="result"></div>
-      <a href="#" data-toggle="tooltip" title="Hooray!">Hover over me</a>
-      <a href="#" data-bs-toggle="tooltip" title="Some tooltip text!">Hover over me</a>
-      <div class="tooltip bs-tooltip-top" role="tooltip">
-        <div class="tooltip-arrow"></div>
-        <div class="tooltip-inner">
-          Some tooltip text!
-        </div>
-      </div>
+      <button type="button" id="next" class="btn btn-primary" style="margin-bottom: 5px;">Next Song</button>
+      <!-- next step: If result is not empty, show "New Song" button for generating another new song? Or just always have a new song button available so users can skip if they want -->
 
-
-      <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Tooltip on bottom">
-        Tooltip on bottom
-      </button>
 
     </div>
     <div id="chart"></div>
+
     <p><strong>References: </strong></p>
     <a href="https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks">Dataset</a><br>
     <a href="https://www.d3-graph-gallery.com/graph/streamgraph_template.html">Streamgraph Template</a><br>
@@ -63,60 +59,42 @@
   <script src="js/hit_flop.js"></script>
   <script>
 
+
+
 // trying to get tooltips to work
-$(document).ready(function () {
-     if ($("[rel=tooltip]").length) {
-     $("[rel=tooltip]").tooltip();
-     }
-   });
-
-      const height = 800 //window.innerHeight;
-      const width = 1200 //window.innerWidth;
-      const margin = ({top: 50, right: 50, bottom: 100, left: 50})
-
-      var svg = d3.select("#chart")
-        .append("svg")
-          .attr("width", width)
-          .attr("height", height)
-        .append("g")
-          .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
-
-      //   function getArtistName(datum) {
-      //     return datum.artists.substring(2, datum.artists.length - 2)
-      //   }
-
-      // function filterByArtist(data, artistName) {
-      //   return data.filter((d) => {
-      //     return artistName == getArtistName(d)
-      //   })
-
-      // }
-
-
       d3.csv("merged_datasets.csv", d3.autoType).then(function(data){
+
+        var nextSongElement = document.getElementById('next')
+          nextSongElement.addEventListener('click', () => {
+            getRandomSong(data)
+          })
         console.log(data)
 
         var song = getRandomSong(data)
         console.log(song)
 
-        // Select artists-lists made and get artists
-        var dropDown = d3.select("#artists-list").append("select")
-                  .attr("name", "artists");
+        songTitles = data.map(d => d.name)
+        console.log(songTitles)
 
-        var artist_data = [ {'value': "Elvis Presley"}, {'value': "The Rolling Stones"}, {'value': "The Beatles"}, {'value': "Queen"}, {'value': "Ignacio Corsini"} ]
-        var defaultArtist = artist_data[0].value;
+        //todo: autocomplete input box
+
+        // Select artists-lists made and get artists
+        // var dropDown = d3.select("#artists-list").append("select")
+        //           .attr("name", "artists");
+
+        // var artist_data = [ {'value': "Elvis Presley"}, {'value': "The Rolling Stones"}, {'value': "The Beatles"}, {'value': "Queen"}, {'value': "Ignacio Corsini"} ]
+        // var defaultArtist = artist_data[0].value;
 
         // let filteredData = filterByArtist(data, defaultArtist)
         // console.log(filteredData)
 
-        var options = dropDown.selectAll("option")
-               .data(artist_data)
-               .enter()
-               .append("option");
+        // var options = dropDown.selectAll("option")
+        //        .data(artist_data)
+        //        .enter()
+        //        .append("option");
 
-        options.text(function (d) { return d.value; })
-               .attr("value", function (d) { return d.value; });
+        // options.text(function (d) { return d.value; })
+        //        .attr("value", function (d) { return d.value; });
         
         // function click(d) {
 
@@ -164,196 +142,196 @@ $(document).ready(function () {
 
         // dropDown.on("change", menuChanged);
 
-        var keys = data.columns.slice(1,3)
+//         var keys = data.columns.slice(1,3)
 
-        var x = d3.scaleUtc()
-          .domain(d3.extent(data, d => d.release_date))
-          .range([margin.left, width - margin.right]);
+//         var x = d3.scaleUtc()
+//           .domain(d3.extent(data, d => d.release_date))
+//           .range([margin.left, width - margin.right]);
           
-        var xAxis = svg.append("g")
-          .attr("transform", `translate(0,${height - margin.bottom})`)
-          .call(d3.axisBottom(x).ticks(width / 50).tickSizeOuter(0))
-          .select(".domain").remove()
+//         var xAxis = svg.append("g")
+//           .attr("transform", `translate(0,${height - margin.bottom})`)
+//           .call(d3.axisBottom(x).ticks(width / 50).tickSizeOuter(0))
+//           .select(".domain").remove()
 
-        // Customization
-        svg.selectAll(".tick line").attr("stroke", "#b8b8b8")
+//         // Customization
+//         svg.selectAll(".tick line").attr("stroke", "#b8b8b8")
 
-        // svg.append("text")
-        //   .attr("text-anchor", "end")
-        //   .attr("x", width)
-        //   .attr("y", height-30 )
-        //   .text("Time (year)");
+//         // svg.append("text")
+//         //   .attr("text-anchor", "end")
+//         //   .attr("x", width)
+//         //   .attr("y", height-30 )
+//         //   .text("Time (year)");
 
-        var y = d3.scaleLinear()
-          .domain([0,1])
-          .range([height - margin.bottom, margin.top])
+//         var y = d3.scaleLinear()
+//           .domain([0,1])
+//           .range([height - margin.bottom, margin.top])
 
-        svg.append("g")
-          .call(d3.axisLeft(y).ticks(5))
+//         svg.append("g")
+//           .call(d3.axisLeft(y).ticks(5))
 
-        var color = d3.scaleOrdinal()
-          .domain(keys)
-          .range(d3.schemeDark2)  
+//         var color = d3.scaleOrdinal()
+//           .domain(keys)
+//           .range(d3.schemeDark2)  
 
-        var series = d3.stack(['danceability', 'acousticness'])
-          .keys(keys) 
-          .offset(d3.stackOffsetSilhouette) 
-          .order(d3.stackOrderInsideOut) 
-          (data)
+//         var series = d3.stack(['danceability', 'acousticness'])
+//           .keys(keys) 
+//           .offset(d3.stackOffsetSilhouette) 
+//           .order(d3.stackOrderInsideOut) 
+//           (data)
 
-        var Tooltip = svg
-          .append("text")
-          .attr("x", 0)
-          .attr("y", 0)
-          .style("opacity", 0)
-          .style("font-size", 17)
+//         var Tooltip = svg
+//           .append("text")
+//           .attr("x", 0)
+//           .attr("y", 0)
+//           .style("opacity", 0)
+//           .style("font-size", 17)
         
-        var mouseover = function(d) {
-          Tooltip.style("opacity", 1)
-          d3.selectAll(".myArea").style("opacity", .2)
-          d3.select(this)
-            .style("stroke", "black")
-            .style("opacity", 1)
-          }
+//         var mouseover = function(d) {
+//           Tooltip.style("opacity", 1)
+//           d3.selectAll(".myArea").style("opacity", .2)
+//           d3.select(this)
+//             .style("stroke", "black")
+//             .style("opacity", 1)
+//           }
 
-        var mousemove = function(d,i) {
-          grp = d.target.__data__.key
-          Tooltip.text(grp)
-        }
+//         var mousemove = function(d,i) {
+//           grp = d.target.__data__.key
+//           Tooltip.text(grp)
+//         }
 
-        var mouseleave = function(d) {
-          Tooltip.style("opacity", 0)
-          d3.selectAll(".myArea").style("opacity", 1).style("stroke", "none")
-        }
+//         var mouseleave = function(d) {
+//           Tooltip.style("opacity", 0)
+//           d3.selectAll(".myArea").style("opacity", 1).style("stroke", "none")
+//         }
 
-        // Trying to add brushing and clippiing
+//         // Trying to add brushing and clippiing
 
-        var clip = svg.append("defs").append("svg:clipPath")
-          .attr("id", "clip")
-          .append("svg:rect")
-          .attr("width", width )
-          .attr("height", height )
-          .attr("x", 0)
-          .attr("y", 0);
-
-
-                // Add brushing
-  var brush = d3.brushX()                 // Add the brush feature using the d3.brush function
-      .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
-      .on("end", updateChart) // Each time the brush selection changes, trigger the 'updateChart' function
+//         var clip = svg.append("defs").append("svg:clipPath")
+//           .attr("id", "clip")
+//           .append("svg:rect")
+//           .attr("width", width )
+//           .attr("height", height )
+//           .attr("x", 0)
+//           .attr("y", 0);
 
 
-  // Create the scatter variable: where both the circles and the brush take place
-  var areaChart = svg.append('g')
-    .attr("clip-path", "url(#clip)")
+//                 // Add brushing
+//   var brush = d3.brushX()                 // Add the brush feature using the d3.brush function
+//       .extent( [ [0,0], [width,height] ] ) // initialise the brush area: start at 0,0 and finishes at width,height: it means I select the whole graph area
+//       .on("end", updateChart) // Each time the brush selection changes, trigger the 'updateChart' function
 
-    var area = d3.area()
-          .x(d => x(d.data.release_date))
-          .y0(d => y(d[0] - d[0]))
-          .y1(d => y(d[1] - d[0]))  
-          .curve(d3.curveMonotoneX);
 
-          areaChart
-          .selectAll("mylayers")
-          .data(series)
-          .enter()
-            .append("path")
-            .attr("class", function(d) { return "myArea " + d.key })
-            .style("fill", function(d) { return color(d.key); })
-            .attr("d", area)
+//   // Create the scatter variable: where both the circles and the brush take place
+//   var areaChart = svg.append('g')
+//     .attr("clip-path", "url(#clip)")
 
-  // // Add the brushing
-  areaChart
-    .append("g")
-      .attr("class", "brush")
-      .call(brush);
+//     var area = d3.area()
+//           .x(d => x(d.data.release_date))
+//           .y0(d => y(d[0] - d[0]))
+//           .y1(d => y(d[1] - d[0]))  
+//           .curve(d3.curveMonotoneX);
 
-      var idleTimeout
-  function idled() { idleTimeout = null; }
+//           areaChart
+//           .selectAll("mylayers")
+//           .data(series)
+//           .enter()
+//             .append("path")
+//             .attr("class", function(d) { return "myArea " + d.key })
+//             .style("fill", function(d) { return color(d.key); })
+//             .attr("d", area)
 
-  // A function that update the chart for given boundaries
-  function updateChart(event, d) {
-    extent = event.selection
+//   // // Add the brushing
+//   areaChart
+//     .append("g")
+//       .attr("class", "brush")
+//       .call(brush);
 
-    // If no selection, back to initial coordinate. Otherwise, update X axis domain
-    if(!extent){
-      if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
-      x.domain(d3.extent(data, function(d) { return d.release_date; }))
-    }else{
-      x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
-      areaChart.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
-    }
+//       var idleTimeout
+//   function idled() { idleTimeout = null; }
 
-    // Update axis and area position
-    xAxis.transition().duration(1000).call(d3.axisBottom(x).ticks(10))
-    areaChart
-      .selectAll("path")
-      .transition().duration(1000)
-      .attr("d", area)
-    }
+//   // A function that update the chart for given boundaries
+//   function updateChart(event, d) {
+//     extent = event.selection
 
-  //   //////////
-  //   // HIGHLIGHT GROUP //
-  //   //////////
+//     // If no selection, back to initial coordinate. Otherwise, update X axis domain
+//     if(!extent){
+//       if (!idleTimeout) return idleTimeout = setTimeout(idled, 350); // This allows to wait a little bit
+//       x.domain(d3.extent(data, function(d) { return d.release_date; }))
+//     }else{
+//       x.domain([ x.invert(extent[0]), x.invert(extent[1]) ])
+//       areaChart.select(".brush").call(brush.move, null) // This remove the grey brush area as soon as the selection has been done
+//     }
 
-  //   // What to do when one group is hovered
-    var highlight = function(d){
-      console.log(d)
-      // reduce opacity of all groups
-      d3.selectAll(".myArea").style("opacity", .1)
-      // expect the one that is hovered
-      d3.select("."+d).style("opacity", 1)
-    }
+//     // Update axis and area position
+//     xAxis.transition().duration(1000).call(d3.axisBottom(x).ticks(10))
+//     areaChart
+//       .selectAll("path")
+//       .transition().duration(1000)
+//       .attr("d", area)
+//     }
 
-    // And when it is not hovered anymore
-    var noHighlight = function(d){
-      d3.selectAll(".myArea").style("opacity", 1)
-    }
+//   //   //////////
+//   //   // HIGHLIGHT GROUP //
+//   //   //////////
 
-//uncomment svg if brushing doesn't work
-        // svg
-        //   .selectAll("mylayers")
-        //   .data(series)
-        //   .enter()
-        //   .append("path")
-        //   .attr("class", "myArea")
-        //   .style("fill", function(d) { return color(d.key); })
-        //   .attr("d", area)
-        //   .on("mouseover", mouseover)
-        //   .on("mousemove", mousemove)
-        //   .on("mouseleave", mouseleave)
+//   //   // What to do when one group is hovered
+//     var highlight = function(d){
+//       console.log(d)
+//       // reduce opacity of all groups
+//       d3.selectAll(".myArea").style("opacity", .1)
+//       // expect the one that is hovered
+//       d3.select("."+d).style("opacity", 1)
+//     }
 
-    //////////
-    // LEGEND //
-    //////////
+//     // And when it is not hovered anymore
+//     var noHighlight = function(d){
+//       d3.selectAll(".myArea").style("opacity", 1)
+//     }
 
-    // Add one dot in the legend for each name.
-    var size = 20
-    svg.selectAll("myrect")
-      .data(keys)
-      .enter()
-      .append("rect")
-        .attr("x", 400)
-        .attr("y", function(d,i){ return 10 + i*(size+5)})
-        .attr("width", size)
-        .attr("height", size)
-        .style("fill", function(d){ return color(d)})
-        .on("mouseover", highlight)
-        .on("mouseleave", noHighlight)
+// //uncomment svg if brushing doesn't work
+//         // svg
+//         //   .selectAll("mylayers")
+//         //   .data(series)
+//         //   .enter()
+//         //   .append("path")
+//         //   .attr("class", "myArea")
+//         //   .style("fill", function(d) { return color(d.key); })
+//         //   .attr("d", area)
+//         //   .on("mouseover", mouseover)
+//         //   .on("mousemove", mousemove)
+//         //   .on("mouseleave", mouseleave)
 
-    // Add one dot in the legend for each name.
-    svg.selectAll("mylabels")
-      .data(keys)
-      .enter()
-      .append("text")
-        .attr("x", 400 + size*1.2)
-        .attr("y", function(d,i){ return 10 + i*(size+5) + (size/2)})
-        .style("fill", function(d){ return color(d)})
-        .text(function(d){ return d})
-        .attr("text-anchor", "left")
-        .style("alignment-baseline", "middle")
-        .on("mouseover", highlight)
-        .on("mouseleave", noHighlight)
+//     //////////
+//     // LEGEND //
+//     //////////
+
+//     // Add one dot in the legend for each name.
+//     var size = 20
+//     svg.selectAll("myrect")
+//       .data(keys)
+//       .enter()
+//       .append("rect")
+//         .attr("x", 400)
+//         .attr("y", function(d,i){ return 10 + i*(size+5)})
+//         .attr("width", size)
+//         .attr("height", size)
+//         .style("fill", function(d){ return color(d)})
+//         .on("mouseover", highlight)
+//         .on("mouseleave", noHighlight)
+
+//     // Add one dot in the legend for each name.
+//     svg.selectAll("mylabels")
+//       .data(keys)
+//       .enter()
+//       .append("text")
+//         .attr("x", 400 + size*1.2)
+//         .attr("y", function(d,i){ return 10 + i*(size+5) + (size/2)})
+//         .style("fill", function(d){ return color(d)})
+//         .text(function(d){ return d})
+//         .attr("text-anchor", "left")
+//         .style("alignment-baseline", "middle")
+//         .on("mouseover", highlight)
+//         .on("mouseleave", noHighlight)
 
         
       })
