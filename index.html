@@ -267,7 +267,7 @@
       "valence",
     ];
 
-    const MARGIN = { top: 0, right: 0, bottom: 0, left: 0 },
+    const MARGIN = { top: 100, right: 0, bottom: 20, left: 0 },
       width = 460 - MARGIN.left - MARGIN.right,
       height = 460 - MARGIN.top - MARGIN.bottom,
       innerRadius = 90,
@@ -496,14 +496,14 @@
           .scaleLinear()
           .domain(
             d3.extent(data, function (d) {
-              return new Date(d.year);
+              return d.year;
             })
           )
           .range([MARGIN.left, width - MARGIN.right]);
 
         svgScatter
           .append("g")
-          .attr("transform", "translate(0," + height - 20 + ")")
+          .attr("transform", `translate(0, ${height})`)
           .call(d3.axisBottom(x))
           // .attr("opacity", "0");
 
