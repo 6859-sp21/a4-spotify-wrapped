@@ -19,7 +19,6 @@ function getRandomSong(data) {
   var artist = datum.artist;
   const songElement = document.getElementById("song-title");
   songElement.innerHTML = `${songTitle} by ${artist}`;
-  // makeArtist(chosenSong, data);
   return datum;
 }
 
