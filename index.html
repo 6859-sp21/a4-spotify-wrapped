@@ -101,80 +101,91 @@
       </div>
     </div>
 
-    <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-        <p style="color: white">
-          Guess if the song was a hit or flop based on the data below.
-        </p>
-        <h3>Current song: <span id="song-title"></span></h3>
+    <!-- <nav class="navbar"> -->
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-8">
+            <h3>Current song: <span id="song-title"></span></h3>
+            <p>
+              <i>Guess if the song was a hit or flop based on the data below.</i>
+            </p>
+          </div>
+          <div class = "col-md-4" style = "padding: 10px;">
+            <div id="song-search-box" class="input-group input-group-lg">
+              <input
+                type="text"
+                class="form-control"
+                aria-label="Large"
+                placeholder="Search for a song"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>
+              Your Guess:
+              <button
+                type="button"
+                id="hit"
+                class="btn btn-success"
+                onClick="isHit(true)"
+              >
+                Hit
+              </button>
+              <button
+                type="button"
+                id="flop"
+                class="btn btn-danger"
+                onClick="isHit(false)"
+              >
+                Flop
+              </button>
+            </h4>
+            <div id="result"></div>
+            <button
+              type="button"
+              id="next"
+              class="btn btn-primary"
+              style="margin-bottom: 5px"
+            >
+              Next Song
+            </button>
+    
+            <br /><br />
+            <!-- <form class="form-inline" style = "color: white;">Search for a song:
+          <input type="email" class="form-control" size="50" placeholder="Song Name">
+          <button type="button" class="btn btn-danger">Search</button>
+        </form> -->
+          </div>
+          </div>
+        </div>
         <!-- <div id="song-search-box" class='input-group input-group-lg'>
       <input type="text" id="song-search" >
     </div> -->
-        <div id="song-search-box" class="input-group input-group-lg">
-          <input
-            type="text"
-            class="form-control"
-            aria-label="Large"
-            placeholder="Search for a song"
-          />
-        </div>
 
-        <h4 style="margin-top: 5px">
-          Your Guess:
-          <button
-            type="button"
-            id="hit"
-            class="btn btn-success"
-            onClick="isHit(true)"
-          >
-            Hit
-          </button>
-          <button
-            type="button"
-            id="flop"
-            class="btn btn-danger"
-            onClick="isHit(false)"
-          >
-            Flop
-          </button>
-        </h4>
-        <div id="result"></div>
-        <button
-          type="button"
-          id="next"
-          class="btn btn-primary"
-          style="margin-bottom: 5px"
-        >
-          Next Song
-        </button>
-
-        <br /><br />
-        <!-- <form class="form-inline" style = "color: white;">Search for a song:
-      <input type="email" class="form-control" size="50" placeholder="Song Name">
-      <button type="button" class="btn btn-danger">Search</button>
-    </form> -->
-      </div>
-    </nav>
-
+    <!-- </nav> -->
+<br>
     <div class="container">
       <div class="row">
         <div class="col-sm-6">
-          <div class="panel panel-primary" style="width: 460px">
-            <div class="panel-heading">Song Characteristics</div>
-            <div class="panel-body">
-              <div id="circularBarplot"></div>
-            </div>
-            <div class="panel-footer">Definitions</div>
-          </div>
+          <!-- <div class="panel panel-primary" style="width: 500px"> -->
+          <!-- <div class="panel-heading">Song Characteristics</div> -->
+          <!-- <div class="panel-body"> -->
+          <div id="circularBarplot"></div>
+          <!-- </div> -->
+          <!-- <div class="panel-footer">Definitions</div> -->
+          <!-- </div> -->
         </div>
         <div class="col-sm-6">
-          <div class="panel panel-danger">
+          <!-- <div class="panel panel-danger">
             <div class="panel-heading">Artist stats</div>
-            <div class="panel-body">
+            <div class="panel-body"> -->
               <select id="selectButton"></select>
-              <div id="scatterPlot"></div>
-            </div>
-            <div class="panel-footer">Instructions / definitions</div>
+              <div style="text-align:center; margin: auto" id="scatterPlot"></div>
+            <!-- </div> -->
+            <!-- <div class="panel-footer">Instructions / definitions</div> -->
           </div>
         </div>
       </div>
@@ -184,17 +195,25 @@
     <br /><br />
 
     <footer class="container-fluid text-center">
-      <p>Checkout our references!</p>
-      <form class="form-inline">
-        Get deals:
-        <input
-          type="email"
-          class="form-control"
-          size="50"
-          placeholder="Email Address"
-        />
-        <button type="button" class="btn btn-danger">Sign Up</button>
-      </form>
+      <div class = "row">
+        <div class = "col-sm-12">
+          <h4>Checkout our references!</h4>
+        </div>
+      </div>
+
+      <div class = "row">
+        <div class = "col-sm-4">
+          <a href="https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks">Dataset</a>
+        </div>
+        <div class = "col-sm-4">
+          <a href="https://www.d3-graph-gallery.com/graph/line_select.html">Dropdown Template</a>
+        </div>
+        <div class = "col-sm-4">
+          <a href="https://github.com/d3/d3-scale-chromatic/blob/master/README.md">Color Scheme</a>
+        </div>
+      </div>
+      
+
     </footer>
   </body>
 
@@ -230,7 +249,6 @@
     <div id="scatterPlot"></div>
 
     <p><strong>References: </strong></p>
-    <a href="https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks">Dataset</a><br>
     <a href="https://www.d3-graph-gallery.com/graph/streamgraph_template.html">Streamgraph Template</a><br>
     <a href="https://www.d3-graph-gallery.com/graph/stackedarea_template.html">Stacked Area Template</a><br>
     <a href="https://www.d3-graph-gallery.com/graph/line_select.html">Dropdown Template</a> <br>
@@ -249,7 +267,7 @@
       "valence",
     ];
 
-    const MARGIN = { top: 100, right: 0, bottom: 0, left: 0 },
+    const MARGIN = { top: 0, right: 0, bottom: 0, left: 0 },
       width = 460 - MARGIN.left - MARGIN.right,
       height = 460 - MARGIN.top - MARGIN.bottom,
       innerRadius = 90,
@@ -319,7 +337,7 @@
           .text(`Audio Features of ${song.name}`);
 
         // Scales
-        var x = d3
+        var xBar = d3
           .scaleBand()
           .range([0, 2 * Math.PI]) // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
           .align(0) // This does nothing
@@ -328,7 +346,7 @@
               return d.feature;
             })
           ); // The domain of the X axis is the list of states.
-        var y = d3
+        var yBar = d3
           .scaleRadial()
           .range([innerRadius, outerRadius]) // Domain will be define later.
           .domain([0, 1]); // Domain of Y is from 0 to the max seen in the data
@@ -347,13 +365,13 @@
               .arc() // imagine your doing a part of a donut plot
               .innerRadius(innerRadius)
               .outerRadius(function (d) {
-                return y(d["value"]);
+                return yBar(d["value"]);
               })
               .startAngle(function (d) {
-                return x(d.feature);
+                return xBar(d.feature);
               })
               .endAngle(function (d) {
-                return x(d.feature) + x.bandwidth();
+                return xBar(d.feature) + xBar.bandwidth();
               })
               .padAngle(0.01)
               .padRadius(innerRadius)
@@ -367,7 +385,7 @@
           .enter()
           .append("g")
           .attr("text-anchor", function (d) {
-            return (x(d.feature) + x.bandwidth() / 2 + Math.PI) %
+            return (xBar(d.feature) + xBar.bandwidth() / 2 + Math.PI) %
               (2 * Math.PI) <
               Math.PI
               ? "end"
@@ -376,10 +394,11 @@
           .attr("transform", function (d) {
             return (
               "rotate(" +
-              (((x(d.feature) + x.bandwidth() / 2) * 180) / Math.PI - 90) +
+              (((xBar(d.feature) + xBar.bandwidth() / 2) * 180) / Math.PI -
+                90) +
               ")" +
               "translate(" +
-              (y(d["value"]) + 10) +
+              (yBar(d["value"]) + 10) +
               ",0)"
             );
           })
@@ -388,7 +407,7 @@
             return d.feature;
           })
           .attr("transform", function (d) {
-            return (x(d.feature) + x.bandwidth() / 2 + Math.PI) %
+            return (xBar(d.feature) + xBar.bandwidth() / 2 + Math.PI) %
               (2 * Math.PI) <
               Math.PI
               ? "rotate(180)"
@@ -413,18 +432,16 @@
             .attr(
               "d",
               d3
-                .arc() // imagine your doing a part of a donut plot
+                .arc() // imagine you're doing a part of a donut plot
                 .innerRadius(innerRadius)
                 .outerRadius(function (d) {
-                  console.log("in outer radius", d["value"]);
-
-                  return y(d["value"]);
+                  return yBar(d["value"]);
                 })
                 .startAngle(function (d) {
-                  return x(d.feature);
+                  return xBar(d.feature);
                 })
                 .endAngle(function (d) {
-                  return x(d.feature) + x.bandwidth();
+                  return xBar(d.feature) + xBar.bandwidth();
                 })
                 .padAngle(0.01)
                 .padRadius(innerRadius)
@@ -433,15 +450,14 @@
           // update song name in the chart title
           svg.select("text").text(`Audio Features of ${song.name}`);
 
-          svg.data(transformedData).transition().duration(1000);
-          // .attr("text-anchor", function(d) { return (x(d.feature) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
-          //     .attr("transform", function(d) { return "rotate(" + ((x(d.feature) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")"+"translate(" + (y(d['value'])+10) + ",0)"; })
-          //     .text(function(d){return(d.feature)})
-          //     .attr("transform", function(d) { return (x(d.feature) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)"; })
+          svg
+            .append("g")
+            .selectAll("g")
+            .data(transformedData)
+            .transition()
+            .duration(1000);
         }
-
         //******************************************************ARTIST SCATTER PLOT*******************************************
-
         let artist_list = data.filter(function (s) {
           return s.artist == song.artist;
         });
@@ -464,9 +480,14 @@
           .attr("width", width + MARGIN.left + MARGIN.right)
           .attr("height", height + MARGIN.top + MARGIN.bottom)
           .append("g")
+          // .style('transform', 'translate(5%, 5%)')
           .attr(
             "transform",
-            "translate(" + MARGIN.left + "," + MARGIN.top + ")"
+            "translate(" +
+              MARGIN.left + 30 + 
+              "," +
+              MARGIN.top +
+              ")"
           );
 
         var x = d3
@@ -476,13 +497,13 @@
               return new Date(d.year);
             })
           )
-          .range([0, width]);
+          .range([MARGIN.left, width - MARGIN.right]);
 
         svgScatter
           .append("g")
-          .attr("transform", "translate(0," + height + ")")
+          .attr("transform", "translate(0," + height - 20 + ")")
           .call(d3.axisBottom(x))
-          .attr("opacity", "0");
+          // .attr("opacity", "0");
 
         // Add Y axis
         var y = d3.scaleLinear().domain([0, 1]).range([height, 0]);
