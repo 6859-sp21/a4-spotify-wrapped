@@ -461,6 +461,8 @@
         let artist_list = data.filter(function (s) {
           return s.artist == song.artist;
         });
+        console.log('artist_list')
+        console.log(artist_list)
 
         d3.select("#selectButton")
           .selectAll("myOptions")
@@ -509,6 +511,37 @@
         var y = d3.scaleLinear().domain([0, 1]).range([height, 0]);
         svgScatter.append("g").call(d3.axisLeft(y));
 
+
+        var tooltip = d3.select("#scatterPlot")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "whhite")
+            .style("border", "solid")
+            .style("border-width", "1px")
+            .style("border-radius", "5px")
+            .style("padding", "10px")
+
+            var mouseover = function(d) {
+              tooltip
+              .style("opacity", 1)
+              }
+
+  var mousemove = function(d) {
+    // console.log(d)
+    // console.log(d.srcElement.__data__.artist)
+    tooltip
+      .html('Artist:' + d.srcElement.__data__.artist + "<br>" + 'Song' + d.srcElement.__data__.name)
+      // .style("left", (d3.mouse(this)[0]+90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+      // .style("top", (d3.mouse(this)[1]) + "px")
+  }
+  var mouseleave = function(d) {
+    tooltip
+      .transition()
+      .duration(200)
+      .style("opacity", 0)
+  }
+
         // Add dots
         var dot = svgScatter
           .append("g")
@@ -523,7 +556,11 @@
             return y(d.acousticness);
           })
           .attr("r", 10)
-          .style("fill", "#69b3a2");
+          .style("fill", "#69b3a2")
+          .on("mouseover", mouseover )
+          .on("mousemove", mousemove )
+          .on("mouseleave", mouseleave );
+
 
         // new X axis
         x.domain(
@@ -531,26 +568,32 @@
             return d.year;
           })
         );
+
+ 
         svgScatter
           .select(".myXaxis")
           .transition()
           .duration(2000)
           .attr("opacity", "1")
-          .call(d3.axisBottom(x));
+          .call(d3.axisBottom(x))
 
-        var circle = svgScatter
-          .selectAll("circle")
-          .transition()
-          .delay(function (d, i) {
-            return i * 5;
-          })
-          .duration(2000)
-          .attr("cx", function (d) {
-            return x(d.year);
-          })
-          .attr("cy", function (d) {
-            return y(d.acousticness);
-          });
+        // var circle = svgScatter
+        //   .selectAll("circle")
+        //   .transition()
+        //   .delay(function (d, i) {
+        //     return i * 5;
+        //   })
+        //   .duration(2000)
+        //   .attr("cx", function (d) {
+        //     return x(d.year);
+        //   })
+        //   .attr("cy", function (d) {
+        //     return y(d.acousticness);
+        //   });
+          
+
+  // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
+
 
         // When the button is changed, run the updateChart function
         d3.select("#selectButton").on("change", function (d) {
@@ -572,7 +615,6 @@
             })
             .attr("r", 10)
             .style("fill", "blue");
-          // .exit()
         }
 
         function updateScatter(song) {
@@ -580,20 +622,59 @@
             return s.artist == song.artist;
           });
 
+          console.log('artist_list')
+          console.log(artist_list)
+
           currentSelection = $("#selectButton option:selected");
 
-          dot
+          // svgScatter.selectAll('dot')
+          // .data(artist_list)
+          // .exit()
+          // .remove()
+
+          // if (dot){ 
+          // circle.exit().remove();
+          // }
+
+          // dot.exit().remove()
+          // svgScatter.selectAll('dot').remove();
+          // svgScatter.selectAll('circle').remove();
+
+          svgScatter
+            .selectAll('circle')
             .data(artist_list)
+            .join(
+              enter => enter.append('circle'),
+              // update => update,
+              exit => exit.remove()
+            )
+            // .enter()
             .transition()
             .duration(2000)
-            .attr("cx", function (d) {
+            // .append("circle")
+            .attr("cx", function (d) {console.log('this is the year' + d.year);
               return x(d.year);
             })
-            .attr("cy", function (d) {
+            .attr("cy", function (d) { console.log('this is thee song' + d[currentSelection])
               return y(d[currentSelection]);
             })
             .attr("r", 10)
-            .style("fill", "blue");
+            .style("fill", "blue")
+
+          // circle
+          // // .selectAll("circle")
+          // .data(artist_list)
+          // .transition()
+          // .delay(function (d, i) {
+          //   return i * 5;
+          // })
+          // .duration(2000)
+          // .attr("cx", function (d) {
+          //   return x(d.year);
+          // })
+          // .attr("cy", function (d) {
+          //   return y(d[currentSelection]);
+          // });
         }
         //******************************************************END ARTIST SCATTER PLOT*******************************************
       })
