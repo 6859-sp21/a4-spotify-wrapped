@@ -197,7 +197,7 @@
     }
 
     const MARGIN = { top: 40, right: 10, bottom: 50, left: 0 },
-      width = 460 - MARGIN.left - MARGIN.right,
+      width = 500 - MARGIN.left - MARGIN.right,
       height = 460 - MARGIN.top - MARGIN.bottom,
       innerRadius = 90,
       outerRadius = Math.min(width, height) / 2;
@@ -471,12 +471,8 @@
 
         var x = d3
           .scaleLinear()
-          .domain(
-            d3.extent(data, function (d) {
-              return d.year;
-            })
-          )
-          .range([MARGIN.left, width - MARGIN.right]);
+          .domain(d3.extent(data, (d) => d.year))
+          .range([MARGIN.left, width - 3.5 * MARGIN.right])
 
         svgScatter
           .append("g")
@@ -503,7 +499,8 @@
 
   var mousemoveScatter = function(d) {
     tooltip
-    .html(`<strong>Artist</strong>: ${d.srcElement.__data__.artist} <br><strong>Song</strong>: <span style='color:red;'>${d.srcElement.__data__.name}</span>`)
+    .html(`<strong>Artist</strong>: ${d.srcElement.__data__.artist} <br><strong>Song</strong>: <span style='color:red;'>${d.srcElement.__data__.name}</span>
+    <br><strong>Year</strong>: ${d.srcElement.__data__.year}`)
       .style("left", (d.offsetX + 50) + "px")
       .style("top", (d.offsetY + 50) + "px")
   }
