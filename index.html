@@ -10,6 +10,9 @@
 />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 <html>
   <style>
@@ -34,18 +37,6 @@
   border-radius: 8px;
   pointer-events: none;
 }
-  </style>
-  <head>
-    <title>Spotify Wrapped</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-    />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <style>
       /* Remove the navbar's default rounded borders and increase the bottom margin */
       .navbar {
         flex-wrap: initial;
@@ -59,40 +50,56 @@
       /* Remove the jumbotron's default bottom margin */
       .jumbotron {
         margin-bottom: 0;
+        background-color: #333333;
+        padding: 10px;
       }
 
       /* Add a gray background color and some padding to the footer */
       footer {
-        background-color: #f2f2f2;
-        padding: 25px;
+        background-color: #333333;
+        padding: 10px;
+        color: white;
+        text-align: left;
       }
-    </style>
+  </style>
+  <head>
+    <title>Spotify Wrapped</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
     <div class="jumbotron">
-      <div class="container text-center">
-        <h2>Remember your favorite hit song?</h2>
-        <p>Or...was it even a hit at all? Play below to find out!</p>
+      <div class="container text-left">
+        <div class = "row">
+          <div class = "col-sm-1">
+            <img src="https://download.logo.wine/logo/Spotify/Spotify-Icon-Logo.wine.png" width = "65px" height = "45px" style = "vertical-align: middle" alt="logo" class="spotify-logo"/>
+          </div>
+          <div class = "col-sm=8">
+            <h1 style="font-family:sans-serif;font-size:48px; color: white; font-weight: bold">Spotify w<span style="color: #1DB954">R</span>apped</h1>
+          </div>
+        </div>
+        <div class = "row">
+          <p style="font-family:sans-serif;font-size:16px;color:white">Use the graphs to guess whether the song was a hit or flop!</p>
+        </div>
       </div>
     </div>
 
       <div class="container">
         <div class="row">
-          <div class="col-sm-8">
-            <h3>Current song: <span id="song-title"></span></h3>
-            <p>
-              <i>Guess if the song was a hit or flop based on the data below.</i>
-            </p>
+          <div class="col-sm-12" style = "text-align: center">
+            <h3>Spotlight: <span id="song-title"></span></h3>
           </div>
-          <div class = "col-sm-4" style = "padding: 10px;">
+        </div>
+        <div class = "row" style = "align-content: center;">
+          <div class = "col-md-5"></div>
+          <div class = "col-md-4" style = "align-items: center; padding: 10px;">
             <h4>
-              Your Guess:
               <button
                 type="button"
                 id="hit"
                 class="btn btn-success"
                 onClick="isHit(true)"
-                style ="width: 100px; height: 50px"
+                style ="width: 200px; height: auto; font-size: 24pt"
               >
                 Hit
               </button>
@@ -101,12 +108,13 @@
                 id="flop"
                 class="btn btn-danger"
                 onClick="isHit(false)"
-                style ="width: 100px; height: 50px"
+                style ="width: 200px; height: auto; font-size: 24pt"
               >
                 Flop
               </button>
             </h4>
           </div>
+          <div class = "col-md-3"></div>
         </div>
 
         <div class="row">
