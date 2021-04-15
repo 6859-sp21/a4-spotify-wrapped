@@ -58,6 +58,19 @@
       top: 100%;
       left: 0;
     }
+
+    div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 200px;
+  height: 50px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}
   </style>
   <head>
     <title>Spotify Wrapped</title>
@@ -351,6 +364,52 @@
           .range([innerRadius, outerRadius]) // Domain will be define later.
           .domain([0, 1]); // Domain of Y is from 0 to the max seen in the data
 
+                  //Add tooltip
+        var tooltipCircle = d3.select("#circularBarplot")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "1px")
+            .style("border-radius", "5px")
+            .style("padding", "10px")
+
+            var mouseover = function(d) {
+              tooltipCircle
+              .style("opacity", 1)
+              d3.select(this)
+              .style("stroke", "black")
+              .style("opacity", 1)
+              }
+
+  var mousemove = function(d) {
+    // console.log(d3.pointer(event)[0])
+    // console.log(d3.pointer(event)[1])
+    // console.log(d)
+    tooltipCircle
+      .html('Feature: ' +  d.srcElement.__data__.feature + "<br>" + 'Value: ' + d.srcElement.__data__.value)
+      // .style("left", d3.select(this).attr("cx") + "px")     
+      // .style("top", d3.select(this).attr("cy") + "px");
+      // .style("left", (d3.pointer(event)[1] - 100) + "px")     
+      // .style("top", (d3.pointer(event)[0] - 100) + "px");
+      .style("left", (d.clientX - d.layerX + d.movementX) + "px")
+      .style("top", (d.clientY - d.layerY + d.movementY) + "px")
+      // .style("left", (d.movementX) + "px")
+      // .style("top", (d.movementY) + "px")
+      // .style("left")
+      // .style("top")
+  }
+  var mouseleave = function(d) {
+    tooltipCircle
+      .transition()
+      .duration(150)
+      .style("opacity", 0)
+      d3.select(this)
+      .style("stroke", "none")
+      .style("opacity", 0.8)
+  }
+
         // Add the bars
         var bars = svg
           .append("g")
@@ -375,7 +434,10 @@
               })
               .padAngle(0.01)
               .padRadius(innerRadius)
-          );
+          )
+          .on("mouseover", mouseover )
+          .on("mousemove", mousemove )
+          .on("mouseleave", mouseleave );
 
         // Add the labels
         svg
@@ -516,31 +578,41 @@
             .append("div")
             .style("opacity", 0)
             .attr("class", "tooltip")
-            .style("background-color", "whhite")
-            .style("border", "solid")
-            .style("border-width", "1px")
-            .style("border-radius", "5px")
-            .style("padding", "10px")
+            // .style("background-color", "whhite")
+            // .style("border", "solid")
+            // .style("border-width", "1px")
+            // .style("border-radius", "5px")
+            // .style("padding", "10px")
 
-            var mouseover = function(d) {
-              tooltip
-              .style("opacity", 1)
-              }
+  //           var mouseover = function(d) {
+  //             tooltip
+  //             .style("opacity", 1)
+  //             d3.select(this)
+  //             .style("stroke", "black")
+  //             .style("opacity", 1)
+  //             .style('display', 'block')
+  //             }
 
-  var mousemove = function(d) {
-    // console.log(d)
-    // console.log(d.srcElement.__data__.artist)
-    tooltip
-      .html('Artist:' + d.srcElement.__data__.artist + "<br>" + 'Song' + d.srcElement.__data__.name)
-      // .style("left", (d3.mouse(this)[0]+90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-      // .style("top", (d3.mouse(this)[1]) + "px")
-  }
-  var mouseleave = function(d) {
-    tooltip
-      .transition()
-      .duration(200)
-      .style("opacity", 0)
-  }
+  // var mousemove = function(d) {
+  //   console.log(d)
+  //   tooltip
+  //     .html('Artist: ' + d.srcElement.__data__.artist + "<br>" + 'Song: ' + d.srcElement.__data__.name)
+  //     .style("left", (d.offsetX) + "px")
+  //     .style("top", (d.offsetY) + "px")
+  //     .style('display', 'block');
+  //     // .style("left", (d3.mouse(this)[0]+90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+  //     // .style("top", (d3.mouse(this)[1]) + "px")
+  // }
+  // var mouseleave = function(d) {
+  //   tooltip
+  //     .transition()
+  //     .duration(1000)
+  //     .style("opacity", 0)
+  //     d3.select(this)
+  //             .style("stroke", "black")
+  //             .style("opacity", 1)
+  //             .style('display', 'block')
+  // }
 
         // Add dots
         var dot = svgScatter
@@ -557,9 +629,26 @@
           })
           .attr("r", 10)
           .style("fill", "#69b3a2")
-          .on("mouseover", mouseover )
-          .on("mousemove", mousemove )
-          .on("mouseleave", mouseleave );
+          .on("mouseover", function(event,d) {
+            console.log('event')
+            console.log(event)
+            console.log('d')
+            console.log(d)
+       tooltip.transition()
+         .duration(200)
+         .style("opacity", .9);
+       tooltip.html(d.artist + "<br/>" + d.name)
+        //  .style("left", (event.pageX) + "px")
+        //  .style("top", (event.pageY) + "px");
+       })
+     .on("mouseout", function(d) {
+       tooltip.transition()
+         .duration(500)
+         .style("opacity", 0);
+       })
+          // .on("mouseover", mouseover )
+          // .on("mousemove", mousemove )
+          // .on("mouseleave", mouseleave );
 
 
         // new X axis
