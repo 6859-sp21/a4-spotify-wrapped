@@ -79,7 +79,7 @@
   height: 50px;
   padding: 2px;
   font: 12px sans-serif;
-  background: lightsteelblue;
+  background: white;
   border: 0px;
   border-radius: 8px;
   pointer-events: none;
@@ -195,23 +195,21 @@
 <br>
     <div class="container">
       <div class="row">
+        <div class="col-sm-6" style = "text-align: center">
+          <h4 id = "radialTitle">Test Title</h4>
+        </div>
+        <div class="col-sm-6" style = "text-align: center">
+          <h4 id = "scatterTitle">Test Title #2</h4>
+          </div>
+        </div>
+        <hr>
+      <div class="row">
         <div class="col-sm-6">
-          <!-- <div class="panel panel-primary" style="width: 500px"> -->
-          <!-- <div class="panel-heading">Song Characteristics</div> -->
-          <!-- <div class="panel-body"> -->
           <div id="circularBarplot"></div>
-          <!-- </div> -->
-          <!-- <div class="panel-footer">Definitions</div> -->
-          <!-- </div> -->
         </div>
         <div class="col-sm-6">
-          <!-- <div class="panel panel-danger">
-            <div class="panel-heading">Artist stats</div>
-            <div class="panel-body"> -->
               <select id="selectButton"></select>
-              <div style="text-align:center; margin: auto" id="scatterPlot"></div>
-            <!-- </div> -->
-            <!-- <div class="panel-footer">Instructions / definitions</div> -->
+              <div style="text-align:center" id="scatterPlot"></div>
           </div>
         </div>
       </div>
@@ -243,44 +241,6 @@
     </footer>
   </body>
 
-  <!-- <head>
-      <h1>Spotify: The Beatles Acousticness and Danceability</h1>
-    </head>
-  <body class="container-fluid">
-
-
-    <div id="hit-or-flop">
-      <h2>Guess if the song was a hit or a flop!</h3>
-      <p>A song is a "hit" if it appeared in Billboards Hot-100 tracks in the decade</p>
-      <h3>Current song: <span id="song-title"></span></h3> -->
-  <!-- <div id="song-search-box" class='input-group input-group-lg'>
-        <input type="text" id="song-search" >
-      </div> -->
-  <!-- <div id="song-search-box"  class="input-group input-group-lg">
-        <input type="text" class="form-control" aria-label="Large" placeholder="Search for a song">
-      </div>
-
-      <h4 style="margin-top: 5px">Your Guess:
-        <button type="button" id="hit" class="btn btn-success" onClick="isHit(true)">Hit</button>
-        <button type="button" id="flop" class="btn btn-danger" onClick="isHit(false)">Flop</button>
-      </h4>
-      <div id="result"></div>
-      <button type="button" id="next" class="btn btn-primary" style="margin-bottom: 5px;">Next Song</button> -->
-  <!-- next step: If result is not empty, show "New Song" button for generating another new song? Or just always have a new song button available so users can skip if they want -->
-
-  <!-- </div>
-    <div id="chart"></div>
-    <div id="circularBarplot"></div>
-    <select id="selectButton"></select>
-    <div id="scatterPlot"></div>
-
-    <p><strong>References: </strong></p>
-    <a href="https://www.d3-graph-gallery.com/graph/streamgraph_template.html">Streamgraph Template</a><br>
-    <a href="https://www.d3-graph-gallery.com/graph/stackedarea_template.html">Stacked Area Template</a><br>
-    <a href="https://www.d3-graph-gallery.com/graph/line_select.html">Dropdown Template</a> <br>
-    <a href="https://github.com/d3/d3-scale-chromatic/blob/master/README.md">Color Scheme</a> <br>
-    <br>
-  </body> -->
   <script src="js/hit_flop.js"></script>
   <script>
     const FEATURES_OF_INTEREST = [
@@ -319,10 +279,14 @@
         var nextSongElement = document.getElementById("next");
         nextSongElement.addEventListener("click", () => {
           song = getRandomSong(data);
+          document.getElementById("radialTitle").innerHTML = "Audio Features of song: " + song.name
+          document.getElementById("scatterTitle").innerHTML = "Reference Songs for " + song.artist
           updateScatter(song);
           updateCircularBarplot(song);
         });
         console.log(data);
+        document.getElementById("radialTitle").innerHTML = "Audio Features of song: " + song.name
+        document.getElementById("scatterTitle").innerHTML = "Reference Songs for " + song.artist
 
         // var song = getRandomSong(data)
         console.log(song);
@@ -361,8 +325,8 @@
           .attr("x", 0)
           .attr("y", (0 - MARGIN.top) * 2)
           .attr("text-anchor", "middle")
-          .style("font-size", "16px")
-          .text(`Audio Features of ${song.name}`);
+          .style("font-size", "16px");
+          // .text(`Audio Features of ${song.name}`);
 
         // Scales
         var xBar = d3
@@ -433,7 +397,7 @@
           .data(transformedData)
           .enter()
           .append("path")
-          .attr("fill", function(d){console.log('d - hello' + d.feature); return myColor(d.feature) })
+          .attr("fill", function(d){return myColor(d.feature) })
           .attr("class", "circularBar")
           .attr(
             "d",
@@ -527,7 +491,7 @@
             );
 
           // update song name in the chart title
-          svg.select("text").text(`Audio Features of ${song.name}`);
+          // svg.select("text").text(`Audio Features of ${song.name}`);
 
           svg
             .append("g")
@@ -579,7 +543,6 @@
             .attr("y", (0 - MARGIN.top)*.5)
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
-            .text(`Audio Features of Songs by ${song.artist}`);
 
           // Create x axis label
           svgScatter
@@ -622,7 +585,7 @@
             .append("div")
             .style("opacity", 0)
             .attr("class", "tooltip")
-            // .style("background-color", "whhite")
+            // .style("background-color", "white")
             // .style("border", "solid")
             // .style("border-width", "1px")
             // .style("border-radius", "5px")
@@ -655,6 +618,8 @@
               .style('display', 'block')
   }
 
+  var shape = d3.scaleOrdinal(artist_list.map(d => d.mode), d3.symbols.map(s => d3.symbol().type(s)()))
+
         // Add dots
         var dot = svgScatter
           .append("g")
@@ -686,7 +651,8 @@
           .on("mouseover", mouseoverScatter )
           .on("mousemove", mousemoveScatter )
           .on("mouseleave", mouseleaveScatter )
-          .attr("fill", function(d){return myColor("acousticness") });
+          .attr("fill", function(d){return myColor("acousticness") })
+          .attr("d", function(d) {console.log(shape(d.mode)); return shape(d.mode)});
 
 
         // new X axis
