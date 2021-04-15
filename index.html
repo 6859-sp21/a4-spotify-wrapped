@@ -22,61 +22,11 @@
       background: white;
     }
 
-    .circularBar {
-      /* fill: mediumaquamarine; */
-    }
-
-    .circularBar:hover {
-      /* fill: darkgreen; */
-    }
-
-    .circularBarTip {
-      line-height: 1;
-      font-weight: bold;
-      padding: 12px;
-      background: rgba(0, 0, 0, 0.8);
-      color: #fff;
-      border-radius: 2px;
-    }
-
-    /* Creates a small triangle extender for the tooltip */
-    .circularBarTip:after {
-      box-sizing: border-box;
-      display: inline;
-      font-size: 10px;
-      width: 100%;
-      line-height: 1;
-      color: rgba(0, 0, 0, 0.8);
-      content: "\25BC";
-      position: absolute;
-      text-align: center;
-    }
-
-    /* Style northward tooltips differently */
-    .dcircularBarTip.n:after {
-      margin: -1px 0 0 0;
-      top: 100%;
-      left: 0;
-    }
-
-    div.barTooltip {
-      position: absolute;
-      text-align: center;
-      width: 200px;
-      height: 100px;
-      padding: 2px;
-      font: 12px sans-serif;
-      background: lightsteelblue;
-      border: 0px;
-      border-radius: 8px;
-      pointer-events: none;
-    }
-
     div.tooltip {
   position: absolute;
-  text-align: center;
-  width: 200px;
-  height: 50px;
+  text-align: left;
+  width: 210px;
+  height: 60px;
   padding: 2px;
   font: 12px sans-serif;
   background: white;
@@ -104,7 +54,6 @@
 
       .navbar {
         margin-bottom: 50px;
-        /* border-radius: 0; */
       }
 
       /* Remove the jumbotron's default bottom margin */
@@ -162,25 +111,6 @@
 
         <div class="row">
           <div class="col-sm-12">
-            <!-- <h4>
-              Your Guess:
-              <button
-                type="button"
-                id="hit"
-                class="btn btn-success"
-                onClick="isHit(true)"
-              >
-                Hit
-              </button>
-              <button
-                type="button"
-                id="flop"
-                class="btn btn-danger"
-                onClick="isHit(false)"
-              >
-                Flop
-              </button>
-            </h4> -->
             <div id="result"></div>
             <button
               type="button"
@@ -192,16 +122,9 @@
             </button>
     
             <br /><br />
-            <!-- <form class="form-inline" style = "color: white;">Search for a song:
-          <input type="email" class="form-control" size="50" placeholder="Song Name">
-          <button type="button" class="btn btn-danger">Search</button>
-        </form> -->
           </div>
           </div>
         </div>
-        <!-- <div id="song-search-box" class='input-group input-group-lg'>
-      <input type="text" id="song-search" >
-    </div> -->
 <br>
     <div class="container">
       <div class="row">
@@ -264,13 +187,13 @@
     ];
 
     const FEATURE_DEFINITIONS = {
-      'acousticness': 'A confidence measure between 0 and 1 of whether the track is acoustic.',
-      'danceability': 'How suitable a track is for dancing based on various musical elements.',
-      'energy': 'A perceptual measure of intensity and activity. Energetic tracks are typically fast and loud.',
-      'instrumentalness': 'Whether a track contains no vocals.',
-      'liveness': 'Likelihood that the track was performed live through detecting whether there was audience presence in the recording.',
-      'speechiness': 'The level of speech-like elements (e.g. talk show, audio book, poetry) in the recording.',
-      'valence': 'A measure from 0 to 1 describing the musical positiveness (e.g. happy, cheerful, euphoric) conveyed by a track.'
+      'acousticness': 'Acoustic / non-acoustic',
+      'danceability': 'How suitable a track is for dancing',
+      'energy': 'Intensity and activity; energetic tracks are typically fast and loud',
+      'instrumentalness': 'Vocals / no vocals',
+      'liveness': 'Likelihood that the track was performed live',
+      'speechiness': 'Speech-like elements (e.g. talk show, audio book, poetry) in the recording',
+      'valence': 'Musical positiveness (e.g. happy, cheerful, euphoric) conveyed by a track'
     }
 
     const MARGIN = { top: 40, right: 10, bottom: 50, left: 0 },
@@ -297,11 +220,6 @@
         console.log(data);
         document.getElementById("radialTitle").innerHTML = "Audio Features of song: " + song.name
         document.getElementById("scatterTitle").innerHTML = "Reference Songs for " + song.artist
-
-        // var song = getRandomSong(data)
-        console.log(song);
-
-        // makeCircularBarplot(song)
 
         songTitles = data.map((d) => d.name);
         console.log(songTitles);
@@ -336,13 +254,12 @@
           .attr("y", (0 - MARGIN.top) * 2)
           .attr("text-anchor", "middle")
           .style("font-size", "16px");
-          // .text(`Audio Features of ${song.name}`);
 
         // Scales
         var xBar = d3
           .scaleBand()
-          .range([0, 2 * Math.PI]) // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
-          .align(0) // This does nothing
+          .range([0, 2 * Math.PI]) 
+          .align(0) 
           .domain(
             transformedData.map(function (d) {
               return d.feature;
@@ -357,12 +274,7 @@
         var tooltipCircle = d3.select("#circularBarplot")
             .append("div")
             .style("opacity", 0)
-            .attr("class", "barTooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "1px")
-            .style("border-radius", "5px")
-            .style("padding", "10px")
+            .attr("class", "tooltip")
 
             var mouseover = function(d) {
               tooltipCircle
@@ -373,31 +285,20 @@
               }
 
   var mousemove = function(d) {
-    // console.log(d3.pointer(event)[0])
-    // console.log(d3.pointer(event)[1])
-    // console.log(d)
     var currentFeature = d.srcElement.__data__.feature
     tooltipCircle
       .html(`<strong>${currentFeature}</strong>: ${FEATURE_DEFINITIONS[currentFeature]} <br><strong>Feature value</strong>: <span style='color:red;'>${d.srcElement.__data__.value}</span>`)
-      // .style("left", d3.select(this).attr("cx") + "px")     
-      // .style("top", d3.select(this).attr("cy") + "px");
-      // .style("left", (d3.pointer(event)[1] - 100) + "px")     
-      // .style("top", (d3.pointer(event)[0] - 100) + "px");
       .style("left", (d.clientX - d.layerX + d.movementX) + "px")
       .style("top", (d.clientY - d.layerY + d.movementY) + "px")
-      // .style("left", (d.movementX) + "px")
-      // .style("top", (d.movementY) + "px")
-      // .style("left")
-      // .style("top")
   }
   var mouseleave = function(d) {
     tooltipCircle
       .transition()
-      .duration(150)
+      .duration(200)
       .style("opacity", 0)
       d3.select(this)
-      .style("stroke", "none")
-      .style("opacity", 0.8)
+      .style("stroke", "black")
+      .style("opacity", 1)
   }
 
         // Add the bars
@@ -581,7 +482,6 @@
           .append("g")
           .attr("transform", `translate(0, ${height})`)
           .call(d3.axisBottom(x))
-          // .attr("opacity", "0");
 
         // Add Y axis
         var y = d3.scaleLinear().domain([0, 1]).range([height, 0]);
@@ -592,11 +492,6 @@
             .append("div")
             .style("opacity", 0)
             .attr("class", "tooltip")
-            // .style("background-color", "white")
-            // .style("border", "solid")
-            // .style("border-width", "1px")
-            // .style("border-radius", "5px")
-            // .style("padding", "10px")
 
             var mouseoverScatter = function(d) {
               tooltip
@@ -604,15 +499,13 @@
               d3.select(this)
               .style("stroke", "black")
               .style("opacity", 1)
-              .style('display', 'block')
               }
 
   var mousemoveScatter = function(d) {
     tooltip
-      .html('Artist: ' + d.srcElement.__data__.artist + "<br>" + 'Song: ' + d.srcElement.__data__.name)
-      .style("left", (d.offsetX) + "px")
-      .style("top", (d.offsetY) + "px")
-      .style('display', 'block');
+    .html(`<strong>Artist</strong>: ${d.srcElement.__data__.artist} <br><strong>Song</strong>: <span style='color:red;'>${d.srcElement.__data__.name}</span>`)
+      .style("left", (d.offsetX + 50) + "px")
+      .style("top", (d.offsetY + 50) + "px")
   }
   var mouseleaveScatter = function(d) {
     tooltip
@@ -622,7 +515,6 @@
       d3.select(this)
               .style("stroke", "black")
               .style("opacity", 1)
-              .style('display', 'block')
   }
 
   // var shape = d3.scaleOrdinal(artist_list.map(d => d.mode), d3.symbols.map(s => d3.symbol().type(s)()))
@@ -744,6 +636,13 @@
             })
             .attr("r", 10)
             .attr("fill", function(d){return myColor(currentSelection[0].innerHTML) })
+
+          svgScatter
+          .selectAll("circle")
+          .on("mouseover", mouseoverScatter )
+          .on("mousemove", mousemoveScatter )
+          .on("mouseleave", mouseleaveScatter )
+            
 
             updateScatterField(currentSelection[0].innerHTML)
         }
