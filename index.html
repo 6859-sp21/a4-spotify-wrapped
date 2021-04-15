@@ -204,7 +204,7 @@
 
       var artist_list = [];
 
-      var myColor = d3.scaleOrdinal().domain(FEATURES_OF_INTEREST).range(d3.schemeSet3);
+      var myColor = d3.scaleOrdinal().domain(FEATURES_OF_INTEREST).range(d3.schemeDark2);
 
     d3.csv("merged_datasets.csv", d3.autoType)
       .then(function (data) {
@@ -481,7 +481,7 @@
         svgScatter
           .append("g")
           .attr("transform", `translate(0, ${height})`)
-          .call(d3.axisBottom(x))
+          .call(d3.axisBottom(x).tickFormat((year, i) => year.toString()))
 
         // Add Y axis
         var y = d3.scaleLinear().domain([0, 1]).range([height, 0]);
@@ -534,39 +534,15 @@
             return y(d.acousticness);
           })
           .attr("r", 10)
-          // .style("fill", "#69b3a2")
-    //       .on("mouseover", function(event,d) {
-    //    tooltip.transition()
-    //      .duration(200)
-    //      .style("opacity", .9);
-    //    tooltip.html(d.artist + "<br/>" + d.name)
-    //     //  .style("left", (event.pageX) + "px")
-    //     //  .style("top", (event.pageY) + "px");
-    //    })
-    //  .on("mouseout", function(d) {
-    //    tooltip.transition()
-    //      .duration(500)
-    //      .style("opacity", 0);
-    //    })
           .on("mouseover", mouseoverScatter )
           .on("mousemove", mousemoveScatter )
           .on("mouseleave", mouseleaveScatter )
           .attr("fill", function(d){
             if (d.name == song.name){
-              return myColor("acousticness") }
+              return '#1DB954' }
               else{
                 return myColor("acousticness")
               }})
-          // .attr("d", symbol.type(function(d){
-    // if(d.name == song.name){ console.log(d.name + " " + song.name); return d3.symbolCross
-    // } else if (d.name == "Bournville"){ return d3.symbolDiamond
-    // } else if (d.name == "Dolfin"){ return d3.symbolSquare
-    // } else if (d.name == "Hershey"){ return d3.symbolStar
-    // } else if (d.name == "Galaxy"){ return d3.symbolTriangle
-    // } else if (d.name == "Dairy Milk"){ return d3.symbolCircle
-// }}))
-          // .attr("d", function(d) {console.log(d.mode); return shape(d.mode)});
-
 
         // new X axis
         x.domain(
@@ -610,7 +586,12 @@
               return y(d[selectedOption]);
             })
             .attr("r", 10)
-            .attr("fill", function(d){return myColor(selectedOption) })
+            .attr("fill", function(d){
+            if (d.name == song.name){
+              return '#1DB954' }
+              else{
+                return myColor(selectedOption)
+              }})
         }
 
         function updateScatter(song) {
@@ -640,7 +621,12 @@
               return y(d[currentSelection[0].innerHTML]);
             })
             .attr("r", 10)
-            .attr("fill", function(d){return myColor(currentSelection[0].innerHTML) })
+            .attr("fill", function(d){
+            if (d.name == song.name){
+              return '#1DB954' }
+              else{
+                return myColor(currentSelection[0].innerHTML)
+              }})
 
           svgScatter
           .selectAll("circle")
