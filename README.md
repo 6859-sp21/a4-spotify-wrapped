@@ -5,6 +5,8 @@
 ## Description
 We created a fun and interactive way for you to guess whether a particular song was a hit or a flop. Are you up for the challenge?
 
+Click [HERE](https://6859-sp21.github.io/a4-spotify-wrapped/) to play
+
 ## Installation
 
 Start by cloning the directory into your local machine and navigate to the folder on your terminal. Then run the following command:
@@ -15,7 +17,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 ...
 ```
 
-Open http://0.0.0.0:8000/ in your browser to see the dashboard. 
+Open http://0.0.0.0:8000/ in your browser to see the dashboard or alternatively, visit the deployed version at https://6859-sp21.github.io/a4-spotify-wrapped/
 
 ## Usage
 
