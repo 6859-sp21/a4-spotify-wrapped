@@ -122,12 +122,11 @@
   <body>
     <div class="jumbotron">
       <div class="container text-center">
-        <h1>Remember your favorite hit song?</h1>
+        <h2>Remember your favorite hit song?</h2>
         <p>Or...was it even a hit at all? Play below to find out!</p>
       </div>
     </div>
 
-    <!-- <nav class="navbar"> -->
       <div class="container">
         <div class="row">
           <div class="col-sm-8">
@@ -136,21 +135,34 @@
               <i>Guess if the song was a hit or flop based on the data below.</i>
             </p>
           </div>
-          <div class = "col-md-4" style = "padding: 10px;">
-            <div id="song-search-box" class="input-group input-group-lg">
-              <input
-                type="text"
-                class="form-control"
-                aria-label="Large"
-                placeholder="Search for a song"
-              />
-            </div>
+          <div class = "col-sm-4" style = "padding: 10px;">
+            <h4>
+              Your Guess:
+              <button
+                type="button"
+                id="hit"
+                class="btn btn-success"
+                onClick="isHit(true)"
+                style ="width: 100px; height: 50px"
+              >
+                Hit
+              </button>
+              <button
+                type="button"
+                id="flop"
+                class="btn btn-danger"
+                onClick="isHit(false)"
+                style ="width: 100px; height: 50px"
+              >
+                Flop
+              </button>
+            </h4>
           </div>
         </div>
 
         <div class="row">
           <div class="col-sm-12">
-            <h4>
+            <!-- <h4>
               Your Guess:
               <button
                 type="button"
@@ -168,7 +180,7 @@
               >
                 Flop
               </button>
-            </h4>
+            </h4> -->
             <div id="result"></div>
             <button
               type="button"
@@ -190,8 +202,6 @@
         <!-- <div id="song-search-box" class='input-group input-group-lg'>
       <input type="text" id="song-search" >
     </div> -->
-
-    <!-- </nav> -->
 <br>
     <div class="container">
       <div class="row">
@@ -263,7 +273,7 @@
       'valence': 'A measure from 0 to 1 describing the musical positiveness (e.g. happy, cheerful, euphoric) conveyed by a track.'
     }
 
-    const MARGIN = { top: 100, right: 10, bottom: 50, left: 0 },
+    const MARGIN = { top: 40, right: 10, bottom: 50, left: 0 },
       width = 460 - MARGIN.left - MARGIN.right,
       height = 460 - MARGIN.top - MARGIN.bottom,
       innerRadius = 90,
@@ -490,9 +500,6 @@
                 .padRadius(innerRadius)
             );
 
-          // update song name in the chart title
-          // svg.select("text").text(`Audio Features of ${song.name}`);
-
           svg
             .append("g")
             .selectAll("g")
@@ -548,7 +555,7 @@
           svgScatter
             .append('text')
             .attr('x', width/2 - MARGIN.right)
-            .attr('y', MARGIN.top * 1.5 + height/2 + 50)
+            .attr('y', MARGIN.top * 1.5 + height/2 + 170)
             .style('text-anchor', 'middle')
             .text('Year')
 
@@ -618,7 +625,8 @@
               .style('display', 'block')
   }
 
-  var shape = d3.scaleOrdinal(artist_list.map(d => d.mode), d3.symbols.map(s => d3.symbol().type(s)()))
+  // var shape = d3.scaleOrdinal(artist_list.map(d => d.mode), d3.symbols.map(s => d3.symbol().type(s)()))
+  // var symbol = d3.symbol();
 
         // Add dots
         var dot = svgScatter
@@ -652,7 +660,15 @@
           .on("mousemove", mousemoveScatter )
           .on("mouseleave", mouseleaveScatter )
           .attr("fill", function(d){return myColor("acousticness") })
-          .attr("d", function(d) {console.log(shape(d.mode)); return shape(d.mode)});
+          // .attr("d", symbol.type(function(d){
+    // if(d.name == song.name){ console.log(d.name + " " + song.name); return d3.symbolCross
+    // } else if (d.name == "Bournville"){ return d3.symbolDiamond
+    // } else if (d.name == "Dolfin"){ return d3.symbolSquare
+    // } else if (d.name == "Hershey"){ return d3.symbolStar
+    // } else if (d.name == "Galaxy"){ return d3.symbolTriangle
+    // } else if (d.name == "Dairy Milk"){ return d3.symbolCircle
+// }}))
+          // .attr("d", function(d) {console.log(d.mode); return shape(d.mode)});
 
 
         // new X axis
@@ -662,28 +678,12 @@
           })
         );
 
- 
         svgScatter
           .select(".myXaxis")
           .transition()
           .duration(2000)
           .attr("opacity", "1")
           .call(d3.axisBottom(x))
-
-        // var circle = svgScatter
-        //   .selectAll("circle")
-        //   .transition()
-        //   .delay(function (d, i) {
-        //     return i * 5;
-        //   })
-        //   .duration(2000)
-        //   .attr("cx", function (d) {
-        //     return x(d.year);
-        //   })
-        //   .attr("cy", function (d) {
-        //     return y(d.acousticness);
-        //   });
-          
 
   // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
 
