@@ -725,19 +725,19 @@
             })
             .attr("r", 10)
             .style("fill", "blue")
-            .on("mouseover", function(event,d) {
-       tooltip.transition()
-         .duration(200)
-         .style("opacity", .9);
-       tooltip.html(d.artist + "<br/>" + d.name)
-        //  .style("left", (event.pageX) + "px")
-        //  .style("top", (event.pageY) + "px");
-       })
-     .on("mouseout", function(d) {
-       tooltip.transition()
-         .duration(500)
-         .style("opacity", 0);
-       });
+    //         .on("mouseover", function(event,d) {
+    //    tooltip.transition()
+    //      .duration(200)
+    //      .style("opacity", .9);
+    //    tooltip.html(d.artist + "<br/>" + d.name)
+    //     //  .style("left", (event.pageX) + "px")
+    //     //  .style("top", (event.pageY) + "px");
+    //    })
+    //  .on("mouseout", function(d) {
+    //    tooltip.transition()
+    //      .duration(500)
+    //      .style("opacity", 0);
+    //    });
         }
 
         function updateScatter(song) {
@@ -781,19 +781,19 @@
             })
             .attr("r", 10)
             .style("fill", "blue")
-            .on("mouseover", function(event,d) {
-       tooltip.transition()
-         .duration(200)
-         .style("opacity", .9);
-       tooltip.html(d.artist + "<br/>" + d.name)
-        //  .style("left", (event.pageX) + "px")
-        //  .style("top", (event.pageY) + "px");
-       })
-     .on("mouseout", function(d) {
-       tooltip.transition()
-         .duration(500)
-         .style("opacity", 0);
-       })
+    //         .on("mouseover", function(event,d) {
+    //    tooltip.transition()
+    //      .duration(200)
+    //      .style("opacity", .9);
+    //    tooltip.html(d.artist + "<br/>" + d.name)
+    //     //  .style("left", (event.pageX) + "px")
+    //     //  .style("top", (event.pageY) + "px");
+    //    })
+    //  .on("mouseout", function(d) {
+    //    tooltip.transition()
+    //      .duration(500)
+    //      .style("opacity", 0);
+    //    })
 
             updateScatterField(currentSelection[0].innerHTML)
             
