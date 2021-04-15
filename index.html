@@ -23,11 +23,11 @@
     }
 
     .circularBar {
-      fill: mediumaquamarine;
+      /* fill: mediumaquamarine; */
     }
 
     .circularBar:hover {
-      fill: darkgreen;
+      /* fill: darkgreen; */
     }
 
     .circularBarTip {
@@ -311,19 +311,8 @@
 
       var artist_list = [];
 
-    //   var tip = d3.tip()
-    //         .attr('class', 'circularBarTip')
-    //         .offset([-10, 0])
-    //         .html(function(d) {
-    //   return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";
-    //   var svg = d3.select("body").append("svg")
-    //   .attr("width", width + margin.left + margin.right)
-    //   .attr("height", height + margin.top + margin.bottom)
-    // .append("g")
-    //   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    //   svg.call(tip)
+      var myColor = d3.scaleOrdinal().domain(FEATURES_OF_INTEREST).range(d3.schemeSet3);
 
-    // trying to get tooltips to work
     d3.csv("merged_datasets.csv", d3.autoType)
       .then(function (data) {
         var song = getRandomSong(data);
@@ -444,6 +433,7 @@
           .data(transformedData)
           .enter()
           .append("path")
+          .attr("fill", function(d){console.log('d - hello' + d.feature); return myColor(d.feature) })
           .attr("class", "circularBar")
           .attr(
             "d",
@@ -575,7 +565,7 @@
           .attr(
             "transform",
             "translate(" +
-            MARGIN.left + 30 +
+            MARGIN.left + 34 +
               "," +
               MARGIN.top +
               ")"
@@ -585,7 +575,7 @@
            svgScatter
             .append("text")
             .attr("class", "scatterTitle")
-            .attr("x", width/2 - MARGIN.right)
+            .attr("x", width + 50)
             .attr("y", (0 - MARGIN.top)*.5)
             .attr("text-anchor", "middle")
             .style("font-size", "16px")
@@ -638,35 +628,32 @@
             // .style("border-radius", "5px")
             // .style("padding", "10px")
 
-  //           var mouseover = function(d) {
-  //             tooltip
-  //             .style("opacity", 1)
-  //             d3.select(this)
-  //             .style("stroke", "black")
-  //             .style("opacity", 1)
-  //             .style('display', 'block')
-  //             }
+            var mouseoverScatter = function(d) {
+              tooltip
+              .style("opacity", 1)
+              d3.select(this)
+              .style("stroke", "black")
+              .style("opacity", 1)
+              .style('display', 'block')
+              }
 
-  // var mousemove = function(d) {
-  //   console.log(d)
-  //   tooltip
-  //     .html('Artist: ' + d.srcElement.__data__.artist + "<br>" + 'Song: ' + d.srcElement.__data__.name)
-  //     .style("left", (d.offsetX) + "px")
-  //     .style("top", (d.offsetY) + "px")
-  //     .style('display', 'block');
-  //     // .style("left", (d3.mouse(this)[0]+90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
-  //     // .style("top", (d3.mouse(this)[1]) + "px")
-  // }
-  // var mouseleave = function(d) {
-  //   tooltip
-  //     .transition()
-  //     .duration(1000)
-  //     .style("opacity", 0)
-  //     d3.select(this)
-  //             .style("stroke", "black")
-  //             .style("opacity", 1)
-  //             .style('display', 'block')
-  // }
+  var mousemoveScatter = function(d) {
+    tooltip
+      .html('Artist: ' + d.srcElement.__data__.artist + "<br>" + 'Song: ' + d.srcElement.__data__.name)
+      .style("left", (d.offsetX) + "px")
+      .style("top", (d.offsetY) + "px")
+      .style('display', 'block');
+  }
+  var mouseleaveScatter = function(d) {
+    tooltip
+      .transition()
+      .duration(200)
+      .style("opacity", 0)
+      d3.select(this)
+              .style("stroke", "black")
+              .style("opacity", 1)
+              .style('display', 'block')
+  }
 
         // Add dots
         var dot = svgScatter
@@ -682,27 +669,24 @@
             return y(d.acousticness);
           })
           .attr("r", 10)
-          .style("fill", "#69b3a2")
-          .on("mouseover", function(event,d) {
-            console.log('event')
-            console.log(event)
-            console.log('d')
-            console.log(d)
-       tooltip.transition()
-         .duration(200)
-         .style("opacity", .9);
-       tooltip.html(d.artist + "<br/>" + d.name)
-        //  .style("left", (event.pageX) + "px")
-        //  .style("top", (event.pageY) + "px");
-       })
-     .on("mouseout", function(d) {
-       tooltip.transition()
-         .duration(500)
-         .style("opacity", 0);
-       })
-          // .on("mouseover", mouseover )
-          // .on("mousemove", mousemove )
-          // .on("mouseleave", mouseleave );
+          // .style("fill", "#69b3a2")
+    //       .on("mouseover", function(event,d) {
+    //    tooltip.transition()
+    //      .duration(200)
+    //      .style("opacity", .9);
+    //    tooltip.html(d.artist + "<br/>" + d.name)
+    //     //  .style("left", (event.pageX) + "px")
+    //     //  .style("top", (event.pageY) + "px");
+    //    })
+    //  .on("mouseout", function(d) {
+    //    tooltip.transition()
+    //      .duration(500)
+    //      .style("opacity", 0);
+    //    })
+          .on("mouseover", mouseoverScatter )
+          .on("mousemove", mousemoveScatter )
+          .on("mouseleave", mouseleaveScatter )
+          .attr("fill", function(d){return myColor("acousticness") });
 
 
         // new X axis
@@ -737,7 +721,6 @@
 
   // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
 
-
         // When the button is changed, run the updateChart function
         d3.select("#selectButton").on("change", function (d) {
           var selectedOption = d3.select(this).property("value");
@@ -748,18 +731,6 @@
         function updateScatterField(selectedOption) {
           console.log(selectedOption)
           console.log(artist_list)
-          // dot
-          //   .data(artist_list)
-          //   .transition()
-          //   .duration(2000)
-          //   .attr("cx", function (d) {
-          //     return x(d.year);
-          //   })
-          //   .attr("cy", function (d) {
-          //     return y(d[selectedOption]);
-          //   })
-          //   .attr("r", 10)
-          //   .style("fill", "blue");
 
             svgScatter
             .selectAll('circle')
@@ -776,24 +747,10 @@
               return y(d[selectedOption]);
             })
             .attr("r", 10)
-            .style("fill", "blue")
-    //         .on("mouseover", function(event,d) {
-    //    tooltip.transition()
-    //      .duration(200)
-    //      .style("opacity", .9);
-    //    tooltip.html(d.artist + "<br/>" + d.name)
-    //     //  .style("left", (event.pageX) + "px")
-    //     //  .style("top", (event.pageY) + "px");
-    //    })
-    //  .on("mouseout", function(d) {
-    //    tooltip.transition()
-    //      .duration(500)
-    //      .style("opacity", 0);
-    //    });
+            .attr("fill", function(d){return myColor(selectedOption) })
         }
 
         function updateScatter(song) {
-          // dot.exit().remove()
           svgScatter.selectAll('circle').remove();
 
           artist_list = data.filter(function (s) {
@@ -804,70 +761,25 @@
           console.log(artist_list)
 
           currentSelection = $("#selectButton option:selected");
-          console.log('currentSelection')
-          console.log(currentSelection[0].innerHTML)
-
-          // if (dot){ 
-          // circle.exit().remove();
-          // }
-
-          // dot.exit().remove()
-          // svgScatter.selectAll('dot').remove();
-          // svgScatter.selectAll('circle').remove();
 
           svgScatter
             .selectAll('dot')
             .data(artist_list)
             .join(
-              enter => enter.append('circle'),
-              // update => update,
-              // exit => exit.remove()
+              enter => enter.append('circle')
             )
             .transition()
             .duration(2000)
-            .attr("cx", function (d) {console.log('this is the year' + d.year);
+            .attr("cx", function (d) {
               return x(d.year);
             })
-            .attr("cy", function (d) { console.log('this is thee song' + d[currentSelection[0].innerHTML])
+            .attr("cy", function (d) {
               return y(d[currentSelection[0].innerHTML]);
             })
             .attr("r", 10)
-            .style("fill", "blue")
-    //         .on("mouseover", function(event,d) {
-    //    tooltip.transition()
-    //      .duration(200)
-    //      .style("opacity", .9);
-    //    tooltip.html(d.artist + "<br/>" + d.name)
-    //     //  .style("left", (event.pageX) + "px")
-    //     //  .style("top", (event.pageY) + "px");
-    //    })
-    //  .on("mouseout", function(d) {
-    //    tooltip.transition()
-    //      .duration(500)
-    //      .style("opacity", 0);
-    //    })
+            .attr("fill", function(d){return myColor(currentSelection[0].innerHTML) })
 
             updateScatterField(currentSelection[0].innerHTML)
-            
-
-            // update scatter plot title
-            // console.log('updating scatter, new song is', song)
-            // svg.select(".scatterTitle").text(`Audio Features of Songs by ${song.artist}`)
-
-          // circle
-          // // .selectAll("circle")
-          // .data(artist_list)
-          // .transition()
-          // .delay(function (d, i) {
-          //   return i * 5;
-          // })
-          // .duration(2000)
-          // .attr("cx", function (d) {
-          //   return x(d.year);
-          // })
-          // .attr("cy", function (d) {
-          //   return y(d[currentSelection]);
-          // });
         }
         //******************************************************END ARTIST SCATTER PLOT*******************************************
       })
