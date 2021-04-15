@@ -471,17 +471,13 @@
 
         var x = d3
           .scaleLinear()
-          .domain(
-            d3.extent(data, function (d) {
-              return d.year;
-            })
-          )
-          .range([MARGIN.left, width - MARGIN.right]);
+          .domain(d3.extent(data, (d) => d.year))
+          .range([MARGIN.left, width - MARGIN.right])
 
         svgScatter
           .append("g")
           .attr("transform", `translate(0, ${height})`)
-          .call(d3.axisBottom(x))
+          .call(d3.axisBottom(x).tickFormat((year, i) => year.toString())) // creates the x-axis
 
         // Add Y axis
         var y = d3.scaleLinear().domain([0, 1]).range([height, 0]);
