@@ -129,12 +129,20 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-6" style = "text-align: center">
-          <h4 id = "radialTitle">Test Title</h4>
+          <h4 id = "radialTitle"></h4>
         </div>
         <div class="col-sm-6" style = "text-align: center">
-          <h4 id = "scatterTitle">Test Title #2</h4>
+          <h4 id = "scatterTitle"></h4>
           </div>
         </div>
+        <div class="row">
+          <div class="col-sm-6" style = "text-align: center">
+            <p style = "color: grey; font-size: 10pt"><i>Hover over each audio feature to see its value.</i></p>
+          </div>
+          <div class="col-sm-6" style = "text-align: center">
+            <p style = "color: grey; font-size: 10pt"><i>Checkout how this song (in yellow!) compares to others made by the same artist.</i></p>
+            </div>
+          </div>
         <hr>
       <div class="row">
         <div class="col-sm-6">
@@ -204,7 +212,8 @@
 
       var artist_list = [];
 
-      var myColor = d3.scaleOrdinal().domain(FEATURES_OF_INTEREST).range(d3.schemeDark2);
+      // var myColor = d3.scaleOrdinal().domain(FEATURES_OF_INTEREST).range(d3.schemeDark2);
+      var myColor = d3.scaleOrdinal().domain(FEATURES_OF_INTEREST).range(['#FEB9B1', '#242DBD', '#79E6DF', '#F26350', '#FE6C2A', '#C24999', '#8BC64D']);
 
     d3.csv("merged_datasets.csv", d3.autoType)
       .then(function (data) {
@@ -287,7 +296,7 @@
   var mousemove = function(d) {
     var currentFeature = d.srcElement.__data__.feature
     tooltipCircle
-      .html(`<strong>${currentFeature}</strong>: ${FEATURE_DEFINITIONS[currentFeature]} <br><strong>Feature value</strong>: <span style='color:red;'>${d.srcElement.__data__.value}</span>`)
+      .html(`<strong>${currentFeature}</strong>: ${FEATURE_DEFINITIONS[currentFeature]} <br><strong>Feature value</strong>: <span>${d.srcElement.__data__.value}</span>`)
       .style("left", (d.clientX - d.layerX + d.movementX) + "px")
       .style("top", (d.clientY - d.layerY + d.movementY) + "px")
   }
@@ -499,7 +508,7 @@
 
   var mousemoveScatter = function(d) {
     tooltip
-    .html(`<strong>Artist</strong>: ${d.srcElement.__data__.artist} <br><strong>Song</strong>: <span style='color:red;'>${d.srcElement.__data__.name}</span>
+    .html(`<strong>Artist</strong>: ${d.srcElement.__data__.artist} <br><strong>Song</strong>: <span>${d.srcElement.__data__.name}</span>
     <br><strong>Year</strong>: ${d.srcElement.__data__.year}`)
       .style("left", (d.offsetX + 50) + "px")
       .style("top", (d.offsetY + 50) + "px")
@@ -536,7 +545,7 @@
           .on("mouseleave", mouseleaveScatter )
           .attr("fill", function(d){
             if (d.name == song.name){
-              return '#1DB954' }
+              return '#FFD847' }
               else{
                 return myColor("acousticness")
               }})
@@ -585,7 +594,7 @@
             .attr("r", 10)
             .attr("fill", function(d){
             if (d.name == song.name){
-              return '#1DB954' }
+              return '#FFD847' }
               else{
                 return myColor(selectedOption)
               }})
@@ -620,7 +629,7 @@
             .attr("r", 10)
             .attr("fill", function(d){
             if (d.name == song.name){
-              return '#1DB954' }
+              return '#FFD847' }
               else{
                 return myColor(currentSelection[0].innerHTML)
               }})
