@@ -24,32 +24,41 @@ function getRandomSong(data) {
 
 function clearResult() {
   document.getElementById("result").innerHTML = "";
+  document.getElementById("result").style.visibility = "hidden";
 }
-
-function getSpecificSong() {}
 
 /**
  *
  * @param boolean userInput Whether the user thought the song was a hit or not
  */
 function isHit(userInput) {
-  // debugger
   const correctAns = chosenSong.target;
-  // console.log(chosenSong)
   const songName = chosenSong.name;
   const artist = chosenSong.artist;
 
   const resultElement = document.getElementById("result");
+  document.getElementById("result").style.visibility = "visible";
+
+  let hitOrFlopStr = "flop";
+  if (correctAns) {
+    hitOrFlopStr = "hit";
+  }
+
   if (userInput == !!correctAns) {
-    resultElement.innerHTML = `<div class="alert alert-info" role="alert">
-        Congratualtions! You are correct! "${songName}" by ${artist} was a hit!
-      </div>`;
-  } else {
-    let hitOrFlopStr = "flop";
+    var resultContent = `<div>
+    You are <strong>CORRECT</strong>!<br>
+    "${songName}" by ${artist} was a ${hitOrFlopStr}<br>`;
+
     if (correctAns) {
-      hitOrFlopStr = "hit";
+      resultContent += `The song was featured in the weekly Billboard top 100 in the ${chosenSong.decade}
+      </div>`;
+    } else {
+      resultContent += `The song was a flop that never appeared in the Billboard top 100`;
     }
-    resultElement.innerHTML = `<div class="alert alert-warning" role="alert">
+
+    resultElement.innerHTML = resultContent;
+  } else {
+    resultElement.innerHTML = `<div>
         "${songName}" was actually a ${hitOrFlopStr}
       </div>`;
   }

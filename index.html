@@ -26,17 +26,38 @@
     }
 
     div.tooltip {
-  position: absolute;
-  text-align: left;
-  width: 210px;
-  height: 60px;
-  padding: 2px;
-  font: 12px sans-serif;
-  background: white;
-  border: 0px;
-  border-radius: 8px;
-  pointer-events: none;
-}
+      position: absolute;
+      text-align: left;
+      width: 210px;
+      height: 60px;
+      padding: 2px;
+      font: 12px sans-serif;
+      background: white;
+      border: 0px;
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    #result {
+      text-align: center;
+      border: 1px;
+      border-style: solid;
+      border-radius: 3px;
+      padding: 3px
+    }
+
+  </style>
+  <head>
+    <title>Spotify Wrapped</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
       /* Remove the navbar's default rounded borders and increase the bottom margin */
       .navbar {
         flex-wrap: initial;
@@ -113,13 +134,14 @@
                 Flop
               </button>
             </h4>
+            <div id="result" style="visibility: hidden"></div>
           </div>
           <div class = "col-md-3"></div>
         </div>
 
         <div class="row">
           <div class="col-sm-12">
-            <div id="result"></div>
+            
             <button
               type="button"
               id="next"
