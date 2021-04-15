@@ -471,13 +471,17 @@
 
         var x = d3
           .scaleLinear()
-          .domain(d3.extent(data, (d) => d.year))
-          .range([MARGIN.left, width - MARGIN.right])
+          .domain(
+            d3.extent(data, function (d) {
+              return d.year;
+            })
+          )
+          .range([MARGIN.left, width - MARGIN.right]);
 
         svgScatter
           .append("g")
           .attr("transform", `translate(0, ${height})`)
-          .call(d3.axisBottom(x).tickFormat((year, i) => year.toString())) // creates the x-axis
+          .call(d3.axisBottom(x))
 
         // Add Y axis
         var y = d3.scaleLinear().domain([0, 1]).range([height, 0]);
@@ -547,7 +551,12 @@
           .on("mouseover", mouseoverScatter )
           .on("mousemove", mousemoveScatter )
           .on("mouseleave", mouseleaveScatter )
-          .attr("fill", function(d){return myColor("acousticness") })
+          .attr("fill", function(d){
+            if (d.name == song.name){
+              return myColor("acousticness") }
+              else{
+                return myColor("acousticness")
+              }})
           // .attr("d", symbol.type(function(d){
     // if(d.name == song.name){ console.log(d.name + " " + song.name); return d3.symbolCross
     // } else if (d.name == "Bournville"){ return d3.symbolDiamond
