@@ -84,6 +84,7 @@ We browsed Kaggle further to see if other Spotify datasets would pop up and came
 Using R Studio, we decided to combine the hit predictor and larger Spotify datasets:
 
 [Spotify Dataset 1921-2020, 160k+ Tracks](https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks) - 174,389 rows, 19 columns
+
 [The Spotify Hit Predictor Dataset (1960-2019)](https://www.kaggle.com/theoverman/the-spotify-hit-predictor-dataset) - 41,106 rows, 19 columns
 
 In order to merge properly, we had to clean up the datasets individually (e.g. formatting column values, removing duplicated information). After the initial cleaning, we combined the datasets to get a final dataset of 14,987 rows. We also double checked various field's histograms to ensure the data was diverse and representative. 
