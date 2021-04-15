@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <script src="https://d3js.org/d3.v6.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-    <!-- Boostrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
+<!-- Boostrap -->
+<link
+  rel="stylesheet"
+  href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 <html>
   <style>
-    body, p {
+    body,
+    p {
       font: 15px helvetica;
     }
 
@@ -17,99 +22,202 @@
       background: white;
     }
 
+    .circularBar {
+      fill: mediumaquamarine;
+    }
 
+    .circularBar:hover {
+      fill: darkgreen;
+    }
+
+    .circularBarTip {
+      line-height: 1;
+      font-weight: bold;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      border-radius: 2px;
+    }
+
+    /* Creates a small triangle extender for the tooltip */
+    .circularBarTip:after {
+      box-sizing: border-box;
+      display: inline;
+      font-size: 10px;
+      width: 100%;
+      line-height: 1;
+      color: rgba(0, 0, 0, 0.8);
+      content: "\25BC";
+      position: absolute;
+      text-align: center;
+    }
+
+    /* Style northward tooltips differently */
+    .dcircularBarTip.n:after {
+      margin: -1px 0 0 0;
+      top: 100%;
+      left: 0;
+    }
   </style>
-<!-- <head>
-  <title>Spotify Wrapped</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <style>
-    /* Remove the navbar's default rounded borders and increase the bottom margin */ 
-    .navbar {
-       flex-wrap: initial;
-       justify-content: left;
-    }
+  <head>
+    <title>Spotify Wrapped</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+      /* Remove the navbar's default rounded borders and increase the bottom margin */
+      .navbar {
+        flex-wrap: initial;
+        justify-content: left;
+      }
 
-    .navbar {
-      margin-bottom: 50px;
-      /* border-radius: 0; */
-    }
+      .navbar {
+        margin-bottom: 50px;
+        /* border-radius: 0; */
+      }
+
+      /* Remove the jumbotron's default bottom margin */
+      .jumbotron {
+        margin-bottom: 0;
+      }
+
+      /* Add a gray background color and some padding to the footer */
+      footer {
+        background-color: #f2f2f2;
+        padding: 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="jumbotron">
+      <div class="container text-center">
+        <h1>Remember your favorite hit song?</h1>
+        <p>Or...was it even a hit at all? Play below to find out!</p>
+      </div>
+    </div>
+
+    <!-- <nav class="navbar"> -->
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-8">
+            <h3>Current song: <span id="song-title"></span></h3>
+            <p>
+              <i>Guess if the song was a hit or flop based on the data below.</i>
+            </p>
+          </div>
+          <div class = "col-md-4" style = "padding: 10px;">
+            <div id="song-search-box" class="input-group input-group-lg">
+              <input
+                type="text"
+                class="form-control"
+                aria-label="Large"
+                placeholder="Search for a song"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>
+              Your Guess:
+              <button
+                type="button"
+                id="hit"
+                class="btn btn-success"
+                onClick="isHit(true)"
+              >
+                Hit
+              </button>
+              <button
+                type="button"
+                id="flop"
+                class="btn btn-danger"
+                onClick="isHit(false)"
+              >
+                Flop
+              </button>
+            </h4>
+            <div id="result"></div>
+            <button
+              type="button"
+              id="next"
+              class="btn btn-primary"
+              style="margin-bottom: 5px"
+            >
+              Next Song
+            </button>
     
-    /* Remove the jumbotron's default bottom margin */ 
-     .jumbotron {
-      margin-bottom: 0;
-    }
-   
-    /* Add a gray background color and some padding to the footer */
-    footer {
-      background-color: #f2f2f2;
-      padding: 25px;
-    }
-  </style>
-</head>
-<body>
+            <br /><br />
+            <!-- <form class="form-inline" style = "color: white;">Search for a song:
+          <input type="email" class="form-control" size="50" placeholder="Song Name">
+          <button type="button" class="btn btn-danger">Search</button>
+        </form> -->
+          </div>
+          </div>
+        </div>
+        <!-- <div id="song-search-box" class='input-group input-group-lg'>
+      <input type="text" id="song-search" >
+    </div> -->
 
-<div class="jumbotron">
-  <div class="container text-center">
-    <h1>Remember your favorite hit song?</h1>      
-    <p>Or...was it even a hit at all? Play below to find out!</p>
-  </div>
-</div>
-
-<nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <p style = "color: white;">Guess if the song was a hit or flop based on the data below.</p>
-    <br><br>
-    <form class="form-inline" style = "color: white;">Search for a song:
-      <input type="email" class="form-control" size="50" placeholder="Song Name">
-      <button type="button" class="btn btn-danger">Search</button>
-    </form>
-  </div>
-</nav>
-
-<div class="container">    
-  <div class="row">
-    <div class="col-sm-4">
-      <div class="panel panel-primary">
-        <div class="panel-heading">Song Characteristics</div>
-        <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-        <div class="panel-footer">Definitions</div>
+    <!-- </nav> -->
+<br>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6">
+          <!-- <div class="panel panel-primary" style="width: 500px"> -->
+          <!-- <div class="panel-heading">Song Characteristics</div> -->
+          <!-- <div class="panel-body"> -->
+          <div id="circularBarplot"></div>
+          <!-- </div> -->
+          <!-- <div class="panel-footer">Definitions</div> -->
+          <!-- </div> -->
+        </div>
+        <div class="col-sm-6">
+          <!-- <div class="panel panel-danger">
+            <div class="panel-heading">Artist stats</div>
+            <div class="panel-body"> -->
+              <select id="selectButton"></select>
+              <div style="text-align:center; margin: auto" id="scatterPlot"></div>
+            <!-- </div> -->
+            <!-- <div class="panel-footer">Instructions / definitions</div> -->
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-sm-4"> 
-      <div class="panel panel-danger">
-        <div class="panel-heading">Artist stats</div>
-        <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-        <div class="panel-footer">Buy 50 mobiles and get a gift card</div>
+    <br />
+
+    <br /><br />
+
+    <footer class="container-fluid text-center">
+      <div class = "row">
+        <div class = "col-sm-12">
+          <h4>Checkout our references!</h4>
+        </div>
       </div>
-    </div>
-    <div class="col-sm-4"> 
-      <div class="panel panel-success">
-        <div class="panel-heading">BLACK FRIDAY DEAL</div>
-        <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-        <div class="panel-footer">Buy 50 mobiles and get a gift card</div>
+
+      <div class = "row">
+        <div class = "col-sm-4">
+          <a href="https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks">Dataset</a>
+        </div>
+        <div class = "col-sm-4">
+          <a href="https://www.d3-graph-gallery.com/graph/line_select.html">Dropdown Template</a>
+        </div>
+        <div class = "col-sm-4">
+          <a href="https://github.com/d3/d3-scale-chromatic/blob/master/README.md">Color Scheme</a>
+        </div>
       </div>
-    </div>
-  </div>
-</div><br>
+      
 
-<br><br>
+    </footer>
+  </body>
 
-<footer class="container-fluid text-center">
-  <p>Checkout our references!</p>  
-  <form class="form-inline">Get deals:
-    <input type="email" class="form-control" size="50" placeholder="Email Address">
-    <button type="button" class="btn btn-danger">Sign Up</button>
-  </form>
-</footer>
-
-</body> -->
-
-
-    <head>
+  <!-- <head>
       <h1>Spotify: The Beatles Acousticness and Danceability</h1>
     </head>
   <body class="container-fluid">
@@ -118,11 +226,11 @@
     <div id="hit-or-flop">
       <h2>Guess if the song was a hit or a flop!</h3>
       <p>A song is a "hit" if it appeared in Billboards Hot-100 tracks in the decade</p>
-      <h3>Current song: <span id="song-title"></span></h3>
-      <!-- <div id="song-search-box" class='input-group input-group-lg'>
+      <h3>Current song: <span id="song-title"></span></h3> -->
+  <!-- <div id="song-search-box" class='input-group input-group-lg'>
         <input type="text" id="song-search" >
       </div> -->
-      <div id="song-search-box"  class="input-group input-group-lg">
+  <!-- <div id="song-search-box"  class="input-group input-group-lg">
         <input type="text" class="form-control" aria-label="Large" placeholder="Search for a song">
       </div>
 
@@ -131,208 +239,456 @@
         <button type="button" id="flop" class="btn btn-danger" onClick="isHit(false)">Flop</button>
       </h4>
       <div id="result"></div>
-      <button type="button" id="next" class="btn btn-primary" style="margin-bottom: 5px;">Next Song</button>
-      <!-- next step: If result is not empty, show "New Song" button for generating another new song? Or just always have a new song button available so users can skip if they want -->
+      <button type="button" id="next" class="btn btn-primary" style="margin-bottom: 5px;">Next Song</button> -->
+  <!-- next step: If result is not empty, show "New Song" button for generating another new song? Or just always have a new song button available so users can skip if they want -->
 
-
-    </div>
+  <!-- </div>
     <div id="chart"></div>
     <div id="circularBarplot"></div>
     <select id="selectButton"></select>
     <div id="scatterPlot"></div>
 
     <p><strong>References: </strong></p>
-    <a href="https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks">Dataset</a><br>
     <a href="https://www.d3-graph-gallery.com/graph/streamgraph_template.html">Streamgraph Template</a><br>
     <a href="https://www.d3-graph-gallery.com/graph/stackedarea_template.html">Stacked Area Template</a><br>
     <a href="https://www.d3-graph-gallery.com/graph/line_select.html">Dropdown Template</a> <br>
     <a href="https://github.com/d3/d3-scale-chromatic/blob/master/README.md">Color Scheme</a> <br>
     <br>
-  </body>
+  </body> -->
   <script src="js/hit_flop.js"></script>
   <script>
+    const FEATURES_OF_INTEREST = [
+      "acousticness",
+      "danceability",
+      "energy",
+      "instrumentalness",
+      "liveness",
+      "speechiness",
+      "valence",
+    ];
 
-// trying to get tooltips to work
-      d3.csv("merged_datasets.csv", d3.autoType).then(function(data){
+    const MARGIN = { top: 100, right: 0, bottom: 20, left: 0 },
+      width = 460 - MARGIN.left - MARGIN.right,
+      height = 460 - MARGIN.top - MARGIN.bottom,
+      innerRadius = 90,
+      outerRadius = Math.min(width, height) / 2;
 
-        var nextSongElement = document.getElementById('next')
-          nextSongElement.addEventListener('click', () => {
-            getRandomSong(data)
-          })
-        console.log(data)
+    //   var tip = d3.tip()
+    //         .attr('class', 'circularBarTip')
+    //         .offset([-10, 0])
+    //         .html(function(d) {
+    //   return "<strong>Frequency:</strong> <span style='color:red'>" + d.frequency + "</span>";
+    //   var svg = d3.select("body").append("svg")
+    //   .attr("width", width + margin.left + margin.right)
+    //   .attr("height", height + margin.top + margin.bottom)
+    // .append("g")
+    //   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    //   svg.call(tip)
 
-        var song = getRandomSong(data)
-        console.log(song)
+    // trying to get tooltips to work
+    d3.csv("merged_datasets.csv", d3.autoType)
+      .then(function (data) {
+        var song = getRandomSong(data);
+        var nextSongElement = document.getElementById("next");
+        nextSongElement.addEventListener("click", () => {
+          song = getRandomSong(data);
+          updateScatter(song);
+          updateCircularBarplot(song);
+        });
+        console.log(data);
 
-        songTitles = data.map(d => d.name)
-        console.log(songTitles)
+        // var song = getRandomSong(data)
+        console.log(song);
+
         // makeCircularBarplot(song)
-        //todo: autocomplete input box
-        
-      })
-      .catch(function(error){})
 
-      function makeCircularBarplot(song) {
-        console.log('in make circular barplot')
-        console.log(song)
+        songTitles = data.map((d) => d.name);
+        console.log(songTitles);
 
-        var transformedData = transformSongFeatureData(song, ['acousticness', 'danceability', 'energy', 'instrumentalness', 'liveness', 'speechiness', 'valence'])
-        console.log(transformedData)
-                  // set the dimensions and margins of the graph
-        var margin = {top: 100, right: 0, bottom: 0, left: 0},
-            width = 460 - margin.left - margin.right,
-            height = 460 - margin.top - margin.bottom,
-            innerRadius = 90,
-            outerRadius = Math.min(width, height) / 2;   // the outerRadius goes from the middle of the SVG area to the border
+        // Make circular barplot
+        var transformedData = transformSongFeatureData(
+          song,
+          FEATURES_OF_INTEREST
+        );
+        console.log(transformedData);
 
         // append the svg object
-        var svg = d3.select("#circularBarplot")
+        var svg = d3
+          .select("#circularBarplot")
           .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+          .attr("width", width + MARGIN.left + MARGIN.right)
+          .attr("height", height + MARGIN.top + MARGIN.bottom)
           .append("g")
-            .attr("transform", "translate(" + (width / 2 + margin.left) + "," + (height / 2 + margin.top) + ")");
+          .attr(
+            "transform",
+            "translate(" +
+              (width / 2 + MARGIN.left) +
+              "," +
+              (height / 2 + MARGIN.top) +
+              ")"
+          );
+
+        svg
+          .append("text")
+          .attr("x", 0)
+          .attr("y", (0 - MARGIN.top) * 2.5)
+          .attr("text-anchor", "middle")
+          .style("font-size", "16px")
+          .text(`Audio Features of ${song.name}`);
 
         // Scales
-        var x = d3.scaleBand()
-            .range([0, 2 * Math.PI])    // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
-            .align(0)                  // This does nothing
-            .domain(transformedData.map(function(d) { return d.feature; })); // The domain of the X axis is the list of states.
-        var y = d3.scaleRadial()
-            .range([innerRadius, outerRadius])   // Domain will be define later.
-            .domain([0, 1]); // Domain of Y is from 0 to the max seen in the data
+        var xBar = d3
+          .scaleBand()
+          .range([0, 2 * Math.PI]) // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
+          .align(0) // This does nothing
+          .domain(
+            transformedData.map(function (d) {
+              return d.feature;
+            })
+          ); // The domain of the X axis is the list of states.
+        var yBar = d3
+          .scaleRadial()
+          .range([innerRadius, outerRadius]) // Domain will be define later.
+          .domain([0, 1]); // Domain of Y is from 0 to the max seen in the data
 
         // Add the bars
-        svg.append("g")
+        var bars = svg
+          .append("g")
           .selectAll("path")
           .data(transformedData)
           .enter()
           .append("path")
-            .attr("fill", "#69b3a2")
-            .attr("d", d3.arc()     // imagine your doing a part of a donut plot
-                .innerRadius(innerRadius)
-                .outerRadius(function(d) { return y(d['value']); })
-                .startAngle(function(d) { return x(d.feature); })
-                .endAngle(function(d) { return x(d.feature) + x.bandwidth(); })
-                .padAngle(0.01)
-                .padRadius(innerRadius))
+          .attr("class", "circularBar")
+          .attr(
+            "d",
+            d3
+              .arc() // imagine your doing a part of a donut plot
+              .innerRadius(innerRadius)
+              .outerRadius(function (d) {
+                return yBar(d["value"]);
+              })
+              .startAngle(function (d) {
+                return xBar(d.feature);
+              })
+              .endAngle(function (d) {
+                return xBar(d.feature) + xBar.bandwidth();
+              })
+              .padAngle(0.01)
+              .padRadius(innerRadius)
+          );
 
         // Add the labels
-        svg.append("g")
+        svg
+          .append("g")
+          .selectAll("g")
+          .data(transformedData)
+          .enter()
+          .append("g")
+          .attr("text-anchor", function (d) {
+            return (xBar(d.feature) + xBar.bandwidth() / 2 + Math.PI) %
+              (2 * Math.PI) <
+              Math.PI
+              ? "end"
+              : "start";
+          })
+          .attr("transform", function (d) {
+            return (
+              "rotate(" +
+              (((xBar(d.feature) + xBar.bandwidth() / 2) * 180) / Math.PI -
+                90) +
+              ")" +
+              "translate(" +
+              (yBar(d["value"]) + 10) +
+              ",0)"
+            );
+          })
+          .append("text")
+          .text(function (d) {
+            return d.feature;
+          })
+          .attr("transform", function (d) {
+            return (xBar(d.feature) + xBar.bandwidth() / 2 + Math.PI) %
+              (2 * Math.PI) <
+              Math.PI
+              ? "rotate(180)"
+              : "rotate(0)";
+          })
+          .style("font-size", "11px")
+          .attr("alignment-baseline", "middle");
+
+        function updateCircularBarplot(newSong) {
+          console.log("in update circular barplot, new song is");
+          console.log(newSong);
+          let updatedData = transformSongFeatureData(
+            newSong,
+            FEATURES_OF_INTEREST
+          );
+          console.log(updatedData);
+
+          bars
+            .data(updatedData)
+            .transition()
+            .duration(1000)
+            .attr(
+              "d",
+              d3
+                .arc() // imagine you're doing a part of a donut plot
+                .innerRadius(innerRadius)
+                .outerRadius(function (d) {
+                  return yBar(d["value"]);
+                })
+                .startAngle(function (d) {
+                  return xBar(d.feature);
+                })
+                .endAngle(function (d) {
+                  return xBar(d.feature) + xBar.bandwidth();
+                })
+                .padAngle(0.01)
+                .padRadius(innerRadius)
+            );
+
+          // update song name in the chart title
+          svg.select("text").text(`Audio Features of ${song.name}`);
+
+          svg
+            .append("g")
             .selectAll("g")
             .data(transformedData)
-            .enter()
-            .append("g")
-              .attr("text-anchor", function(d) { return (x(d.feature) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start"; })
-              .attr("transform", function(d) { return "rotate(" + ((x(d.feature) + x.bandwidth() / 2) * 180 / Math.PI - 90) + ")"+"translate(" + (y(d['value'])+10) + ",0)"; })
-            .append("text")
-              .text(function(d){return(d.feature)})
-              .attr("transform", function(d) { return (x(d.feature) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)"; })
-              .style("font-size", "11px")
-              .attr("alignment-baseline", "middle")
-      }
-
-      function makeArtist(song, data){
+            .transition()
+            .duration(1000);
+        }
+        //******************************************************ARTIST SCATTER PLOT*******************************************
         let artist_list = data.filter(function (s) {
           return s.artist == song.artist;
         });
-
-        console.log('artist list')
+        console.log('artist_list')
         console.log(artist_list)
 
-        var featureGroup = ['acousticness', 'danceability', 'energy'];
-
         d3.select("#selectButton")
-        .selectAll("myOptions")
-        .data(featureGroup)
-        .enter()
-        .append("option")
-        .text(function (d) {
-          return d;
-        }) // text showed in the menu
-        .attr("value", function (d) {
-          return d;
+          .selectAll("myOptions")
+          .data(FEATURES_OF_INTEREST)
+          .enter()
+          .append("option")
+          .text(function (d) {
+            return d;
+          }) // text showed in the menu
+          .attr("value", function (d) {
+            return d;
+          });
+
+        var svgScatter = d3
+          .select("#scatterPlot")
+          .append("svg")
+          .attr("width", width + MARGIN.left + MARGIN.right)
+          .attr("height", height + MARGIN.top + MARGIN.bottom)
+          .append("g")
+          // .style('transform', 'translate(5%, 5%)')
+          .attr(
+            "transform",
+            "translate(" +
+              MARGIN.left + 30 + 
+              "," +
+              MARGIN.top +
+              ")"
+          );
+
+        var x = d3
+          .scaleLinear()
+          .domain(
+            d3.extent(data, function (d) {
+              return d.year;
+            })
+          )
+          .range([MARGIN.left, width - MARGIN.right]);
+
+        svgScatter
+          .append("g")
+          .attr("transform", `translate(0, ${height})`)
+          .call(d3.axisBottom(x))
+          // .attr("opacity", "0");
+
+        // Add Y axis
+        var y = d3.scaleLinear().domain([0, 1]).range([height, 0]);
+        svgScatter.append("g").call(d3.axisLeft(y));
+
+
+        var tooltip = d3.select("#scatterPlot")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "whhite")
+            .style("border", "solid")
+            .style("border-width", "1px")
+            .style("border-radius", "5px")
+            .style("padding", "10px")
+
+            var mouseover = function(d) {
+              tooltip
+              .style("opacity", 1)
+              }
+
+  var mousemove = function(d) {
+    // console.log(d)
+    // console.log(d.srcElement.__data__.artist)
+    tooltip
+      .html('Artist:' + d.srcElement.__data__.artist + "<br>" + 'Song' + d.srcElement.__data__.name)
+      // .style("left", (d3.mouse(this)[0]+90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+      // .style("top", (d3.mouse(this)[1]) + "px")
+  }
+  var mouseleave = function(d) {
+    tooltip
+      .transition()
+      .duration(200)
+      .style("opacity", 0)
+  }
+
+        // Add dots
+        var dot = svgScatter
+          .append("g")
+          .selectAll("dot")
+          .data(artist_list)
+          .enter()
+          .append("circle")
+          .attr("cx", function (d) {
+            return x(d.year);
+          })
+          .attr("cy", function (d) {
+            return y(d.acousticness);
+          })
+          .attr("r", 10)
+          .style("fill", "#69b3a2")
+          .on("mouseover", mouseover )
+          .on("mousemove", mousemove )
+          .on("mouseleave", mouseleave );
+
+
+        // new X axis
+        x.domain(
+          d3.extent(data, function (d) {
+            return d.year;
+          })
+        );
+
+ 
+        svgScatter
+          .select(".myXaxis")
+          .transition()
+          .duration(2000)
+          .attr("opacity", "1")
+          .call(d3.axisBottom(x))
+
+        // var circle = svgScatter
+        //   .selectAll("circle")
+        //   .transition()
+        //   .delay(function (d, i) {
+        //     return i * 5;
+        //   })
+        //   .duration(2000)
+        //   .attr("cx", function (d) {
+        //     return x(d.year);
+        //   })
+        //   .attr("cy", function (d) {
+        //     return y(d.acousticness);
+        //   });
+          
+
+  // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
+
+
+        // When the button is changed, run the updateChart function
+        d3.select("#selectButton").on("change", function (d) {
+          var selectedOption = d3.select(this).property("value");
+
+          updateScatterField(selectedOption);
         });
 
-        var margin = {top: 100, right: 0, bottom: 0, left: 0},
-            width = 460 - margin.left - margin.right,
-            height = 460 - margin.top - margin.bottom,
-            innerRadius = 90,
-            outerRadius = Math.min(width, height) / 2;
+        function updateScatterField(selectedOption) {
+          dot
+            .data(artist_list)
+            .transition()
+            .duration(2000)
+            .attr("cx", function (d) {
+              return x(d.year);
+            })
+            .attr("cy", function (d) {
+              return y(d[selectedOption]);
+            })
+            .attr("r", 10)
+            .style("fill", "blue");
+        }
 
-        let svg = d3.select("#scatterPlot")
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        function updateScatter(song) {
+          let artist_list = data.filter(function (s) {
+            return s.artist == song.artist;
+          });
 
-            var x = d3.scaleLinear()
-            .attr("class", "myXaxis")   // Note that here we give a class to the X axis, to be able to call it later and modify it
-              .domain(d3.extent(data, function(d) { return new Date(d.year); }))
-              .range([ 0, width ]);
+          console.log('artist_list')
+          console.log(artist_list)
 
-svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x))
-    .attr("opacity", "0")
+          currentSelection = $("#selectButton option:selected");
 
-  // Add Y axis
-  var y = d3.scaleLinear()
-    .domain([0, 1])
-    .range([ height, 0]);
-  svg.append("g")
-    .call(d3.axisLeft(y));
+          // svgScatter.selectAll('dot')
+          // .data(artist_list)
+          // .exit()
+          // .remove()
 
-  // Add dots
-  var dot = svg.append('g')
-    .selectAll("dot")
-    .data(artist_list)
-    .enter()
-    .append("circle")
-      .attr("cx", function (d) { return x(d.year); } )
-      .attr("cy", function (d) { return y(d.acousticness); } )
-      .attr("r", 10)
-      .style("fill", "#69b3a2")
+          // if (dot){ 
+          // circle.exit().remove();
+          // }
 
-  // new X axis
-  x.domain(d3.extent(data, function(d) { return d.year; }))
-  svg.select(".myXaxis")
-    .transition()
-    .duration(2000)
-    .attr("opacity", "1")
-    .call(d3.axisBottom(x));
+          // dot.exit().remove()
+          // svgScatter.selectAll('dot').remove();
+          // svgScatter.selectAll('circle').remove();
 
-  var circle = svg.selectAll("circle")
-    .transition()
-    .delay(function(d,i){return(i*10)})
-    .duration(2000)
-    .attr("cx", function (d) { return x(d.year); } )
-    .attr("cy", function (d) { return y(d.acousticness); } )
+          svgScatter
+            .selectAll('circle')
+            .data(artist_list)
+            .join(
+              enter => enter.append('circle'),
+              // update => update,
+              exit => exit.remove()
+            )
+            // .enter()
+            .transition()
+            .duration(2000)
+            // .append("circle")
+            .attr("cx", function (d) {console.log('this is the year' + d.year);
+              return x(d.year);
+            })
+            .attr("cy", function (d) { console.log('this is thee song' + d[currentSelection])
+              return y(d[currentSelection]);
+            })
+            .attr("r", 10)
+            .style("fill", "blue")
 
-    // When the button is changed, run the updateChart function
-        d3.select("#selectButton").on("change", function (d) {
-        var selectedOption = d3.select(this).property("value");
-        
-          dot.data(artist_list)
-          .transition()
-          .duration(3000)
-          .attr("cx", function (d) { return x(d.year); } )
-          .attr("cy", function (d) { return y(d[selectedOption]); } )
-          .attr("r", 10)
-          .style("fill", "blue")
+          // circle
+          // // .selectAll("circle")
+          // .data(artist_list)
+          // .transition()
+          // .delay(function (d, i) {
+          //   return i * 5;
+          // })
+          // .duration(2000)
+          // .attr("cx", function (d) {
+          //   return x(d.year);
+          // })
+          // .attr("cy", function (d) {
+          //   return y(d[currentSelection]);
+          // });
+        }
+        //******************************************************END ARTIST SCATTER PLOT*******************************************
+      })
+      .catch((e) => {
+        console.log(e);
       });
-      }
 
-
-function transformSongFeatureData(song, featuresOfInterest) {
-  var output = []
-  featuresOfInterest.forEach(feature => {
-    var dict = {feature: [feature][0], value: [song[feature]][0]}
-    output.push(dict)
-  })
-  return output;
-}
-
-    </script>
+    function transformSongFeatureData(song, featuresOfInterest) {
+      var output = [];
+      featuresOfInterest.forEach((feature) => {
+        var dict = { feature: [feature][0], value: [song[feature]][0] };
+        output.push(dict);
+      });
+      return output;
+    }
+  </script>
 </html>
