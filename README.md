@@ -1,8 +1,7 @@
 # Spotify wRapped
 
-![alt text](https://github.com/6859-sp21/a4-spotify-wrapped/new/main/?raw=true)
+![alt text](https://github.com/6859-sp21/a4-spotify-wrapped/blob/main/Images/Wrapped.png)
 
-## Description
 We created a fun and interactive way for you to guess whether a particular song was a hit or a flop. Are you up for the challenge?
 
 ## Installation
@@ -63,7 +62,8 @@ Our team faced many hurdles along the A4 journey. First off, none of us had prio
 ### Sketching Ideas
 When we got started on the project, we took inspiration from A0 and sketched out some ideas on pen and paper:
 
-***************** PUT PHOTOS HERE *****************
+![alt_text](https://github.com/6859-sp21/a4-spotify-wrapped/blob/main/Images/Brainstorm1.png)
+![alt_text](https://github.com/6859-sp21/a4-spotify-wrapped/blob/main/Images/Brainstorm2.png)
 
 ### Struggle with Streamgraph
 We had fun exploring the data together on Tableau and letting our imaginations take over. We choose to shoot high and attempted a streamgraph from the get-go. Our inspiration came from this [Streamgraph on D3](https://observablehq.com/@d3/streamgraph). We wanted to visualize different audio features for an artist like Elvis Presley overtime. All three of us worked on the same graph, constantly tried debugging and frequently asked the TAs for help. As it got closer to the demo day, we realized that our prototype was not working. We decided to create the video anyhow and explain our overall concept to our classmates. The feedback we received afterwards was incredible, filled with ideas that we haven't thought of before and encouragement! 
