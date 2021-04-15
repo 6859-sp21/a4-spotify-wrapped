@@ -59,6 +59,19 @@
       left: 0;
     }
 
+    div.barTooltip {
+      position: absolute;
+      text-align: center;
+      width: 200px;
+      height: 100px;
+      padding: 2px;
+      font: 12px sans-serif;
+      background: lightsteelblue;
+      border: 0px;
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
     div.tooltip {
   position: absolute;
   text-align: center;
@@ -280,7 +293,17 @@
       "valence",
     ];
 
-    const MARGIN = { top: 100, right: 0, bottom: 20, left: 0 },
+    const FEATURE_DEFINITIONS = {
+      'acousticness': 'A confidence measure between 0 and 1 of whether the track is acoustic.',
+      'danceability': 'How suitable a track is for dancing based on various musical elements.',
+      'energy': 'A perceptual measure of intensity and activity. Energetic tracks are typically fast and loud.',
+      'instrumentalness': 'Whether a track contains no vocals.',
+      'liveness': 'Likelihood that the track was performed live through detecting whether there was audience presence in the recording.',
+      'speechiness': 'The level of speech-like elements (e.g. talk show, audio book, poetry) in the recording.',
+      'valence': 'A measure from 0 to 1 describing the musical positiveness (e.g. happy, cheerful, euphoric) conveyed by a track.'
+    }
+
+    const MARGIN = { top: 100, right: 10, bottom: 50, left: 0 },
       width = 460 - MARGIN.left - MARGIN.right,
       height = 460 - MARGIN.top - MARGIN.bottom,
       innerRadius = 90,
@@ -341,10 +364,11 @@
               ")"
           );
 
+        // Add chart title to bar plot
         svg
           .append("text")
           .attr("x", 0)
-          .attr("y", (0 - MARGIN.top) * 2.5)
+          .attr("y", (0 - MARGIN.top) * 2)
           .attr("text-anchor", "middle")
           .style("font-size", "16px")
           .text(`Audio Features of ${song.name}`);
@@ -368,7 +392,7 @@
         var tooltipCircle = d3.select("#circularBarplot")
             .append("div")
             .style("opacity", 0)
-            .attr("class", "tooltip")
+            .attr("class", "barTooltip")
             .style("background-color", "white")
             .style("border", "solid")
             .style("border-width", "1px")
@@ -387,8 +411,9 @@
     // console.log(d3.pointer(event)[0])
     // console.log(d3.pointer(event)[1])
     // console.log(d)
+    var currentFeature = d.srcElement.__data__.feature
     tooltipCircle
-      .html('Feature: ' +  d.srcElement.__data__.feature + "<br>" + 'Value: ' + d.srcElement.__data__.value)
+      .html(`<strong>${currentFeature}</strong>: ${FEATURE_DEFINITIONS[currentFeature]} <br><strong>Feature value</strong>: <span style='color:red;'>${d.srcElement.__data__.value}</span>`)
       // .style("left", d3.select(this).attr("cx") + "px")     
       // .style("top", d3.select(this).attr("cy") + "px");
       // .style("left", (d3.pointer(event)[1] - 100) + "px")     
@@ -548,11 +573,38 @@
           .attr(
             "transform",
             "translate(" +
-              MARGIN.left + 30 + 
+            MARGIN.left + 30 +
               "," +
               MARGIN.top +
               ")"
           );
+
+          // Add chart title to scatter plot
+           svgScatter
+            .append("text")
+            .attr("class", "scatterTitle")
+            .attr("x", width/2 - MARGIN.right)
+            .attr("y", (0 - MARGIN.top)*.5)
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .text(`Audio Features of Songs by ${song.artist}`);
+
+          // Create x axis label
+          svgScatter
+            .append('text')
+            .attr('x', width/2 - MARGIN.right)
+            .attr('y', MARGIN.top * 1.5 + height/2 + 50)
+            .style('text-anchor', 'middle')
+            .text('Year')
+
+          // Create y axis label
+          svgScatter
+            .append('text')
+            .attr('y', -25)
+            .attr('x', -height / 2)
+            .style('text-anchor', 'middle')
+            .attr('transform', 'rotate(-90)')
+            .text('Value')
 
         var x = d3
           .scaleLinear()
@@ -749,6 +801,10 @@
             })
             .attr("r", 10)
             .style("fill", "blue")
+
+            // update scatter plot title
+            // console.log('updating scatter, new song is', song)
+            // svg.select(".scatterTitle").text(`Audio Features of Songs by ${song.artist}`)
 
           // circle
           // // .selectAll("circle")
