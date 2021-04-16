@@ -40,16 +40,16 @@ function isHit(userInput) {
   const artist = chosenSong.artist;
 
   const resultElement = document.getElementById("result");
-  if (userInput == !!correctAns) {
-    resultElement.innerHTML = `<div class="alert alert-info" role="alert">
-        Congratulations! You are correct! "${songName}" by ${artist} was a hit!
+  let hitOrFlopStr = "flop";
+  if (correctAns) {
+    hitOrFlopStr = "hit";
+  }
+  if (userInput == correctAns) {
+    resultElement.innerHTML = `<div class="alert alert-info" style= "background-color: #D5F9D6" role="alert">
+        Congratulations! You are correct! "${songName}" by ${artist} was a ${hitOrFlopStr}!
       </div>`;
   } else {
-    let hitOrFlopStr = "flop";
-    if (correctAns) {
-      hitOrFlopStr = "hit";
-    }
-    resultElement.innerHTML = `<div class="alert alert-warning" role="alert">
+    resultElement.innerHTML = `<div class="alert alert-warning" style = "color: white; background-color: #F1ABA5"role="alert">
         "${songName}" was actually a ${hitOrFlopStr}.
       </div>`;
   }

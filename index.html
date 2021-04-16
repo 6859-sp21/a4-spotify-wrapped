@@ -19,7 +19,7 @@
     body,
     p {
       font: 15px helvetica;
-      /* background-color: lightgray */
+      background-color: #F0F0F0;
     }
 
     #chart {
@@ -69,6 +69,11 @@
         height: 5px;
         margin: 3em auto;
       }
+
+      /* hr{
+        color: lightgreen;
+      } */
+
   </style>
   <head>
     <title>Spotify Wrapped</title>
@@ -87,7 +92,11 @@
           </div>
         </div>
         <div class = "row">
-          <p style="font-family:sans-serif;font-size:16px;color:white">Use the graphs to guess whether the song was a hit or flop!</p>
+          <div class = "col-sm-1">
+          </div>
+          <div class = "col-sm-8">
+            <p style="font-family:sans-serif;font-size:16px;color:white;background-color: #333333">Use the graphs to guess whether the song was a hit or flop!</p>
+          </div>
         </div>
       </div>
     </div>
@@ -110,7 +119,7 @@
                 type="button"
                 id="hit"
                 class="btn btn-success"
-                onClick="isHit(true)"
+                onClick="isHit(1)"
                 style ="width: 200px; height: auto; font-size: 20pt;
                 margin-left: 10px; margin-bottom: 50px; background-color:#1DB954;"
               >
@@ -121,7 +130,7 @@
                 type="button"
                 id="flop"
                 class="btn btn-danger"
-                onClick="isHit(false)"
+                onClick="isHit(0)"
                 style ="width: 200px; height: auto; font-size: 20pt; margin-left: 10px; margin-bottom: 50px;
                 background-color:#ED2939;"
               >
@@ -142,14 +151,17 @@
           </div>
           <!-- <div class = "col-md-3"></div> -->
         </div>
+        <div class = "row">
+          <div class = "line-break"></div>
+        </div>
 
         <div class="row">
-          <div class="col-sm-12">
+          <div class="col-sm-4">
+          </div>
+          <div class="col-sm-4">
             <div id="result"></div>
-
-            <div class = "line-break"></div>
-    
-            <br />
+          </div>
+          <div class="col-sm-4">
           </div>
           </div>
         </div>
