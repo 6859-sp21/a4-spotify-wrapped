@@ -7,7 +7,7 @@
 
 We created a fun and interactive way for you to guess whether a particular song was a hit or a flop. Are you up for the challenge?
 
-Click [HERE](https://6859-sp21.github.io/a4-spotify-wrapped/) to play
+Click [HERE](https://6859-sp21.github.io/a4-spotify-wrapped/) to play!
 
 ## Installation
 
@@ -24,6 +24,8 @@ Open http://0.0.0.0:8000/ in your browser to see the dashboard or alternatively,
 ## Usage
 
 When you view the dashboard, you'll see a random song and its corresponding artist appear on the top of the screen. You'll also see two graphs to help guide your decision on whether the song is a hit or a flop. Note songs are identified as hits or flops based on the [Spotify Hit Predictor Dataset (1960 - 2019)] (https://www.kaggle.com/theoverman/the-spotify-hit-predictor-dataset) obtained from Kaggle.
+
+_Note: If you only see one dot in the scatter plot, *it’s not a mistake!* The artist only has one song in the dataset._
 
 ### Audio Features: Radial barplot of the randomized song's audio features
 
@@ -92,6 +94,7 @@ After going through the feedback in detail and deliberating on our next steps, w
 We browsed Kaggle further to see if other Spotify datasets would pop up and came across this [hit flop predictor Spotify dataset](https://www.kaggle.com/theoverman/the-spotify-hit-predictor-dataset). We decided to create a game using this dataset where users guess whether a random song was a hit or a flop. We went back to the drawing board and brainstormed further ways to visualize data and came up with the circular barplot and scatter plot.
 
 ### Data Transformations
+
 Using R Studio, we decided to combine the hit predictor and larger Spotify datasets:
 
 [Spotify Dataset 1921-2020, 160k+ Tracks](https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks) - 174,389 rows, 19 columns
@@ -99,6 +102,13 @@ Using R Studio, we decided to combine the hit predictor and larger Spotify datas
 [The Spotify Hit Predictor Dataset (1960-2019)](https://www.kaggle.com/theoverman/the-spotify-hit-predictor-dataset) - 41,106 rows, 19 columns
 
 In order to merge properly, we had to clean up the datasets individually (e.g. formatting column values, removing duplicated information). After the initial cleaning, we combined the datasets to get a final dataset of 14,987 rows. We also double checked various field's histograms to ensure the data was diverse and representative. We spot checked for accuracy to ensure the datasets were joined correctly and that the data was spread sufficiently throughout each decade.
+
+### Dividing Up Work
+
+Taking learnings from the streamgraph journey, we decided to split up the development work:
+* Christina: Scatter plot and resident tooltip expert
+* Elizabeth: Circular barplot, hit/flop/next song functionality
+* Sravani: UI design, write up, circular barplot
 
 After several working sessions and iterations, we finally got the dashboard to be fully functional! Over the past few weeks, we collectively spent around 105 hours.
 
