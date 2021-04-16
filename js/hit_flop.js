@@ -7,12 +7,12 @@ var chosenSong = 0;
  * @returns int Index of the chosen song
  */
 function getRandomSong(data) {
-  console.log("in get random song");
+  // console.log("in get random song");
   clearResult();
   var randIndex = Math.floor(Math.random() * data.length);
 
-  console.log("rand index is: ");
-  console.log(randIndex);
+  // console.log("rand index is: ");
+  // console.log(randIndex);
   var datum = data[randIndex];
   chosenSong = datum;
   var songTitle = datum.name;
@@ -26,16 +26,12 @@ function clearResult() {
   document.getElementById("result").innerHTML = "";
 }
 
-function getSpecificSong() {}
-
 /**
  *
  * @param boolean userInput Whether the user thought the song was a hit or not
  */
 function isHit(userInput) {
-  // debugger
   const correctAns = chosenSong.target;
-  // console.log(chosenSong)
   const songName = chosenSong.name;
   const artist = chosenSong.artist;
 

@@ -27,70 +27,70 @@
     }
 
     div.tooltip {
-        position: absolute;
-        text-align: left;
-        width: 210px;
-        height: 60px;
-        padding: 2px;
-        font: 12px sans-serif;
-        background: white;
-        border: 0px;
-        border-radius: 8px;
-        pointer-events: none;
-      }
-      /* Remove the navbar's default rounded borders and increase the bottom margin */
-      .navbar {
-        flex-wrap: initial;
-        justify-content: left;
-      }
+      position: absolute;
+      text-align: left;
+      width: 210px;
+      height: 60px;
+      padding: 2px;
+      font: 12px sans-serif;
+      background: white;
+      border: 0px;
+      border-radius: 8px;
+      pointer-events: none;
+    }
+    /* Remove the navbar's default rounded borders and increase the bottom margin */
+    .navbar {
+      flex-wrap: initial;
+      justify-content: left;
+    }
 
-      .navbar {
-        margin-bottom: 50px;
-      }
+    .navbar {
+      margin-bottom: 50px;
+    }
 
-      /* Remove the jumbotron's default bottom margin */
-      .jumbotron {
-        margin-bottom: 0;
-        background-color: #333333;
-        padding: 10px;
-      }
+    /* Remove the jumbotron's default bottom margin */
+    .jumbotron {
+      margin-bottom: 0;
+      background-color: #333333;
+      padding: 10px;
+    }
 
-      .container.text-left {
-        background-color: #333333;
-        padding: 10px;
-      }
+    .container.text-left {
+      background-color: #333333;
+      padding: 10px;
+    }
 
-      /* .spotify-logo {
-        float: left;
-        padding: 0 5px 0 0;
-      } */
+    /* .spotify-logo {
+      float: left;
+      padding: 0 5px 0 0;
+    } */
 
-      a {
-        color: #1DB954;
-        font-family: sans-serif;
-      }
+    a {
+      color: #1DB954;
+      font-family: sans-serif;
+    }
 
-      /* Add a gray background color and some padding to the footer */
-      footer {
-        background-color: #333333;
-        padding: 10px;
-        color: white;
-        text-align: left;
-      }
+    /* Add a gray background color and some padding to the footer */
+    footer {
+      background-color: #333333;
+      padding: 10px;
+      color: white;
+      text-align: left;
+    }
 
-      .line-break{
-        background: #A9E5AC;
-        width: 200px;
-        height: 5px;
-        margin: 3em auto;
-      }
+    .line-break{
+      background: #A9E5AC;
+      width: 200px;
+      height: 5px;
+      margin: 3em auto;
+    }
 
-      .center {
-        display: block;
-        margin-left: auto;
-        margin-right: 0px;
-        width: 100%;
-      }
+    .center {
+      display: block;
+      margin-left: auto;
+      margin-right: 0px;
+      width: 100%;
+    }
 
   </style>
   <head>
@@ -166,7 +166,6 @@
             </h4>
             
           </div>
-          <!-- <div class = "col-md-3"></div> -->
         </div>
         <div class = "row">
           <div class = "line-break"></div>
@@ -244,10 +243,7 @@
         <div class = "col-sm-4">
           <a href = "https://www.d3-graph-gallery.com/graph/circular_barplot_label.html">Circular Barplot</a>
         </div>
-        
       </div>
-      
-
     </footer>
   </body>
 
@@ -281,7 +277,6 @@
 
       var artist_list = [];
 
-      // var myColor = d3.scaleOrdinal().domain(FEATURES_OF_INTEREST).range(d3.schemeDark2);
       var myColor = d3.scaleOrdinal().domain(FEATURES_OF_INTEREST).range(['#FEB9B1', '#242DBD', '#79E6DF', '#A674E7', '#FE6C2A', '#C24999', '#8BC64D']);
 
     d3.csv("merged_datasets.csv", d3.autoType)
@@ -296,20 +291,17 @@
           updateScatter(song);
           updateCircularBarplot(song);
         });
-        console.log(data);
+        // console.log(data);
         document.getElementById("radialTitle").innerHTML = "Audio Features of Song: " + song.name
         document.getElementById("scatterTitle").innerHTML = "Reference Songs for " + song.artist
         document.getElementById("spotify_link").src = "https://open.spotify.com/embed/track/" + song.id
-
-        songTitles = data.map((d) => d.name);
-        console.log(songTitles);
 
         // Make circular barplot
         var transformedData = transformSongFeatureData(
           song,
           FEATURES_OF_INTEREST
         );
-        console.log(transformedData);
+        // console.log(transformedData);
 
         // append the svg object
         var svg = d3
@@ -341,28 +333,26 @@
           .range([0, 2 * Math.PI]) 
           .align(0) 
           .domain(
-            transformedData.map(function (d) {
-              return d.feature;
-            })
-          ); // The domain of the X axis is the list of states.
+            transformedData.map(d => d.feature)
+          ); // The domain of the X axis is the years.
         var yBar = d3
           .scaleRadial()
-          .range([innerRadius, outerRadius]) // Domain will be define later.
+          .range([innerRadius, outerRadius]) // Domain will be defined later.
           .domain([0, 1]); // Domain of Y is from 0 to the max seen in the data
 
-                  //Add tooltip
+        //Add tooltip
         var tooltipCircle = d3.select("#circularBarplot")
             .append("div")
             .style("opacity", 0)
             .attr("class", "tooltip")
 
-            var mouseover = function(d) {
-              tooltipCircle
-              .style("opacity", 1)
-              d3.select(this)
-              .style("stroke", "black")
-              .style("opacity", 1)
-              }
+        var mouseover = function(d) {
+          tooltipCircle
+          .style("opacity", 1)
+          d3.select(this)
+          .style("stroke", "black")
+          .style("opacity", 1)
+        }
 
   var mousemove = function(d) {
     var currentFeature = d.srcElement.__data__.feature
@@ -373,6 +363,7 @@
       .style("left", (d.offsetX + 50) + "px")
       .style("top", (d.offsetY + 50) + "px")
   }
+
   var mouseleave = function(d) {
     tooltipCircle
       .transition()
@@ -383,201 +374,184 @@
       .style("opacity", 1)
   }
 
-        // Add the bars
-        var bars = svg
-          .append("g")
-          .selectAll("path")
-          .data(transformedData)
-          .enter()
-          .append("path")
-          .attr("fill", function(d){return myColor(d.feature) })
-          .attr("class", "circularBar")
-          .attr(
-            "d",
-            d3
-              .arc() // imagine your doing a part of a donut plot
-              .innerRadius(innerRadius)
-              .outerRadius(function (d) {
-                return yBar(d["value"]);
-              })
-              .startAngle(function (d) {
-                return xBar(d.feature);
-              })
-              .endAngle(function (d) {
-                return xBar(d.feature) + xBar.bandwidth();
-              })
-              .padAngle(0.01)
-              .padRadius(innerRadius)
-          )
-          .on("mouseover", mouseover )
-          .on("mousemove", mousemove )
-          .on("mouseleave", mouseleave );
+  // Add the bars
+  var bars = svg
+    .append("g")
+    .selectAll("path")
+    .data(transformedData)
+    .enter()
+    .append("path")
+    .attr("fill", d => myColor(d.feature))
+    .attr("class", "circularBar")
+    .attr(
+      "d",
+      d3
+        .arc() // imagine your doing a part of a donut plot
+        .innerRadius(innerRadius)
+        .outerRadius(d => yBar(d['value']))
+        .startAngle(d => xBar(d.feature))
+        .endAngle(d => xBar(d.feature) + xBar.bandwidth())
+        .padAngle(0.01)
+        .padRadius(innerRadius)
+    )
+    .on("mouseover", mouseover )
+    .on("mousemove", mousemove )
+    .on("mouseleave", mouseleave );
 
-        // Add the labels
-        svg
-          .append("g")
-          .selectAll("g")
-          .data(transformedData)
-          .enter()
-          .append("g")
-          .attr("text-anchor", function (d) {
-            return (xBar(d.feature) + xBar.bandwidth() / 2 + Math.PI) %
-              (2 * Math.PI) <
-              Math.PI
-              ? "end"
-              : "start";
-          })
-          .attr("transform", function (d) {
-            return (
-              "rotate(" +
-              (((xBar(d.feature) + xBar.bandwidth() / 2) * 180) / Math.PI -
-                90) +
-              ")" +
-              "translate(" +
-              (yBar(d["value"]) + 10) +
-              ",0)"
-            );
-          })
-          .append("text")
-          .text(function (d) {
-            return d.feature;
-          })
-          .attr("transform", function (d) {
-            return (xBar(d.feature) + xBar.bandwidth() / 2 + Math.PI) %
-              (2 * Math.PI) <
-              Math.PI
-              ? "rotate(180)"
-              : "rotate(0)";
-          })
-          .style("font-size", "11px")
-          .attr("alignment-baseline", "middle");
+  // Add the labels
+  svg
+    .append("g")
+    .selectAll("g")
+    .data(transformedData)
+    .enter()
+    .append("g")
+    .attr("text-anchor", d => {
+      return (xBar(d.feature) + xBar.bandwidth() / 2 + Math.PI) %
+        (2 * Math.PI) <
+        Math.PI
+        ? "end"
+        : "start";
+    })
+    .attr("transform", d => {
+      return (
+        "rotate(" +
+        (((xBar(d.feature) + xBar.bandwidth() / 2) * 180) / Math.PI -
+          90) +
+        ")" +
+        "translate(" +
+        (yBar(d["value"]) + 10) +
+        ",0)"
+      );
+    })
+    .append("text")
+    .text(d => {
+      return d.feature;
+    })
+    .attr("transform", d => {
+      return (xBar(d.feature) + xBar.bandwidth() / 2 + Math.PI) %
+        (2 * Math.PI) <
+        Math.PI
+        ? "rotate(180)"
+        : "rotate(0)";
+    })
+    .style("font-size", "11px")
+    .attr("alignment-baseline", "middle");
 
-        function updateCircularBarplot(newSong) {
-          console.log("in update circular barplot, new song is");
-          console.log(newSong);
-          let updatedData = transformSongFeatureData(
-            newSong,
-            FEATURES_OF_INTEREST
-          );
-          console.log(updatedData);
+  function updateCircularBarplot(newSong) {
+    // console.log("in update circular barplot, new song is");
+    // console.log(newSong);
+    let updatedData = transformSongFeatureData(
+      newSong,
+      FEATURES_OF_INTEREST
+    );
 
-          bars
-            .data(updatedData)
-            .transition()
-            .duration(1000)
-            .attr(
-              "d",
-              d3
-                .arc() // imagine you're doing a part of a donut plot
-                .innerRadius(innerRadius)
-                .outerRadius(function (d) {
-                  return yBar(d["value"]);
-                })
-                .startAngle(function (d) {
-                  return xBar(d.feature);
-                })
-                .endAngle(function (d) {
-                  return xBar(d.feature) + xBar.bandwidth();
-                })
-                .padAngle(0.01)
-                .padRadius(innerRadius)
-            );
+    bars
+      .data(updatedData)
+      .transition()
+      .duration(1000)
+      .attr(
+        "d",
+        d3
+          .arc() // imagine you're doing a part of a donut plot
+          .innerRadius(innerRadius)
+          .outerRadius(d => yBar(d["value"]))
+          .startAngle(d => xBar(d.feature))
+          .endAngle(d => xBar(d.feature) + xBar.bandwidth())
+          .padAngle(0.01)
+          .padRadius(innerRadius)
+      );
 
-          svg
-            .append("g")
-            .selectAll("g")
-            .data(transformedData)
-            .transition()
-            .duration(1000);
-        }
-        //******************************************************ARTIST SCATTER PLOT*******************************************
-        artist_list = data.filter(function (s) {
-          return s.artist == song.artist;
-        });
-        console.log('artist_list')
-        console.log(artist_list)
+    svg
+      .append("g")
+      .selectAll("g")
+      .data(transformedData)
+      .transition()
+      .duration(1000);
+  }
+  //****************************************************** ARTIST SCATTER PLOT *******************************************
+  artist_list = data.filter(function (s) {
+    return s.artist == song.artist;
+  });
+  // console.log('artist_list')
+  // console.log(artist_list)
 
-        d3.select("#selectButton")
-          .selectAll("myOptions")
-          .data(FEATURES_OF_INTEREST)
-          .enter()
-          .append("option")
-          .text(function (d) {
-            return d;
-          }) // text showed in the menu
-          .attr("value", function (d) {
-            return d;
-          });
+  d3.select("#selectButton")
+    .selectAll("myOptions")
+    .data(FEATURES_OF_INTEREST)
+    .enter()
+    .append("option")
+    .text(d => d) // text showed in the menu
+    .attr("value", d => d);
 
-        var svgScatter = d3
-          .select("#scatterPlot")
-          .append("svg")
-          .attr("width", width + MARGIN.left + MARGIN.right)
-          .attr("height", height + MARGIN.top + MARGIN.bottom)
-          .append("g")
-          // .style('transform', 'translate(5%, 5%)')
-          .attr(
-            "transform",
-            "translate(" +
-            MARGIN.left + 34 +
-              "," +
-              MARGIN.top +
-              ")"
-          );
+  var svgScatter = d3
+    .select("#scatterPlot")
+    .append("svg")
+    .attr("width", width + MARGIN.left + MARGIN.right)
+    .attr("height", height + MARGIN.top + MARGIN.bottom)
+    .append("g")
+    // .style('transform', 'translate(5%, 5%)')
+    .attr(
+      "transform",
+      "translate(" +
+      MARGIN.left + 34 +
+        "," +
+        MARGIN.top +
+        ")"
+    );
 
-          // Add chart title to scatter plot
-           svgScatter
-            .append("text")
-            .attr("class", "scatterTitle")
-            .attr("x", width + 50)
-            .attr("y", (0 - MARGIN.top)*.5)
-            .attr("text-anchor", "middle")
-            .style("font-size", "16px")
+  // Add chart title to scatter plot
+  svgScatter
+    .append("text")
+    .attr("class", "scatterTitle")
+    .attr("x", width + 50)
+    .attr("y", (0 - MARGIN.top)*.5)
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
 
-          // Create x axis label
-          svgScatter
-            .append('text')
-            .attr('x', width/2 - MARGIN.right)
-            .attr('y', MARGIN.top * 1.5 + height/2 + 170)
-            .style('text-anchor', 'middle')
-            .text('Year')
+  // Create x axis label
+  svgScatter
+    .append('text')
+    .attr('x', width/2 - MARGIN.right)
+    .attr('y', MARGIN.top * 1.5 + height/2 + 170)
+    .style('text-anchor', 'middle')
+    .text('Year')
 
-          // Create y axis label
-          svgScatter
-            .append('text')
-            .attr('y', -25)
-            .attr('x', -height / 2)
-            .style('text-anchor', 'middle')
-            .attr('transform', 'rotate(-90)')
-            .text('Value')
+  // Create y axis label
+  svgScatter
+    .append('text')
+    .attr('y', -25)
+    .attr('x', -height / 2)
+    .style('text-anchor', 'middle')
+    .attr('transform', 'rotate(-90)')
+    .text('Value')
 
-        var x = d3
-          .scaleLinear()
-          .domain(d3.extent(data, (d) => d.year))
-          .range([MARGIN.left, width - 3.5 * MARGIN.right])
+  var x = d3
+    .scaleLinear()
+    .domain(d3.extent(data, d => d.year))
+    .range([MARGIN.left, width - 3.5 * MARGIN.right])
 
-        svgScatter
-          .append("g")
-          .attr("transform", `translate(0, ${height})`)
-          .call(d3.axisBottom(x).tickFormat((year, i) => year.toString()))
+  svgScatter
+    .append("g")
+    .attr("transform", `translate(0, ${height})`)
+    .call(d3.axisBottom(x).tickFormat((year, i) => year.toString()))
 
-        // Add Y axis
-        var y = d3.scaleLinear().domain([0, 1]).range([height, 0]);
-        svgScatter.append("g").call(d3.axisLeft(y));
+  // Add Y axis
+  var y = d3.scaleLinear().domain([0, 1]).range([height, 0]);
+  svgScatter.append("g").call(d3.axisLeft(y));
 
 
-        var tooltip = d3.select("#scatterPlot")
-            .append("div")
-            .style("opacity", 0)
-            .attr("class", "tooltip")
+  var tooltip = d3.select("#scatterPlot")
+    .append("div")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
 
-            var mouseoverScatter = function(d) {
-              tooltip
-              .style("opacity", 1)
-              d3.select(this)
-              .style("stroke", "black")
-              .style("opacity", 1)
-              }
+  var mouseoverScatter = function(d) {
+    tooltip
+    .style("opacity", 1)
+    d3.select(this)
+    .style("stroke", "black")
+    .style("opacity", 1)
+  }
 
   var mousemoveScatter = function(d) {
     tooltip
@@ -586,149 +560,132 @@
       .style("left", (d.offsetX + 50) + "px")
       .style("top", (d.offsetY + 50) + "px")
   }
+
   var mouseleaveScatter = function(d) {
     tooltip
       .transition()
       .duration(200)
       .style("opacity", 0)
-      d3.select(this)
-              .style("stroke", "black")
-              .style("opacity", 1)
+    d3.select(this)
+      .style("stroke", "black")
+      .style("opacity", 1)
   }
 
   // var shape = d3.scaleOrdinal(artist_list.map(d => d.mode), d3.symbols.map(s => d3.symbol().type(s)()))
   // var symbol = d3.symbol();
 
-        // Add dots
-        var dot = svgScatter
-          .append("g")
-          .selectAll("dot")
-          .data(artist_list)
-          .enter()
-          .append("circle")
-          .attr("cx", function (d) {
-            return x(d.year);
-          })
-          .attr("cy", function (d) {
-            return y(d.acousticness);
-          })
-          .attr("r", 10)
-          .on("mouseover", mouseoverScatter )
-          .on("mousemove", mousemoveScatter )
-          .on("mouseleave", mouseleaveScatter )
-          .attr("fill", function(d){
-            if (d.name == song.name){
-              return '#FFD847' }
-              else{
-                return myColor("acousticness")
-              }})
+  // Add dots
+  var dot = svgScatter
+    .append("g")
+    .selectAll("dot")
+    .data(artist_list)
+    .enter()
+    .append("circle")
+    .attr("cx", d => x(d.year))
+    .attr("cy", d => y(d.acousticness))
+    .attr("r", 10)
+    .on("mouseover", mouseoverScatter)
+    .on("mousemove", mousemoveScatter)
+    .on("mouseleave", mouseleaveScatter)
+    .attr("fill", function(d) {
+      if (d.name == song.name) {
+        return '#FFD847' }
+      return myColor("acousticness")
+    })
 
-        // new X axis
-        x.domain(
-          d3.extent(data, function (d) {
-            return d.year;
-          })
-        );
+  // new X axis
+  x.domain(
+    d3.extent(data, d => d.year)
+  );
 
-        svgScatter
-          .select(".myXaxis")
-          .transition()
-          .duration(2000)
-          .attr("opacity", "1")
-          .call(d3.axisBottom(x))
+  svgScatter
+    .select(".myXaxis")
+    .transition()
+    .duration(2000)
+    .attr("opacity", "1")
+    .call(d3.axisBottom(x))
 
   // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
 
-        // When the button is changed, run the updateChart function
-        d3.select("#selectButton").on("change", function (d) {
-          var selectedOption = d3.select(this).property("value");
+  // When the button is changed, run the updateChart function
+  d3.select("#selectButton").on("change", function (d) {
+    var selectedOption = d3.select(this).property("value");
 
-          updateScatterField(selectedOption);
-        });
+    updateScatterField(selectedOption);
+  });
 
-        function updateScatterField(selectedOption) {
-          console.log(selectedOption)
-          console.log(artist_list)
+  function updateScatterField(selectedOption) {
+    // console.log(selectedOption)
+    // console.log(artist_list)
 
-            svgScatter
-            .selectAll('circle')
-            .data(artist_list)
-            .join(
-              update => update
-            )
-            .transition()
-            .duration(2000)
-            .attr("cx", function (d) {
-              return x(d.year);
-            })
-            .attr("cy", function (d) {
-              return y(d[selectedOption]);
-            })
-            .attr("r", 10)
-            .attr("fill", function(d){
-            if (d.name == song.name){
-              return '#FFD847' }
-              else{
-                return myColor(selectedOption)
-              }})
-        }
+    svgScatter
+    .selectAll('circle')
+    .data(artist_list)
+    .join(update => update)
+    .transition()
+    .duration(2000)
+    .attr("cx", d => x(d.year))
+    .attr("cy", d => y(d[selectedOption]))
+    .attr("r", 10)
+    .attr("fill", function(d){
+      if (d.name == song.name){
+        return '#FFD847' 
+      } else {
+          return myColor(selectedOption)
+      }
+    })
+  }
 
-        function updateScatter(song) {
-          svgScatter.selectAll('circle').remove();
+  function updateScatter(song) {
+    svgScatter.selectAll('circle').remove();
 
-          artist_list = data.filter(function (s) {
-            return s.artist == song.artist;
-          });
+    artist_list = data.filter(s => s.artist == song.artist);
 
-          console.log('artist_list')
-          console.log(artist_list)
+    // console.log('artist_list')
+    // console.log(artist_list)
 
-          currentSelection = $("#selectButton option:selected");
+    currentSelection = $("#selectButton option:selected");
 
-          svgScatter
-            .selectAll('dot')
-            .data(artist_list)
-            .join(
-              enter => enter.append('circle')
-            )
-            .transition()
-            .duration(2000)
-            .attr("cx", function (d) {
-              return x(d.year);
-            })
-            .attr("cy", function (d) {
-              return y(d[currentSelection[0].innerHTML]);
-            })
-            .attr("r", 10)
-            .attr("fill", function(d){
-            if (d.name == song.name){
-              return '#FFD847' }
-              else{
-                return myColor(currentSelection[0].innerHTML)
-              }})
+    svgScatter
+      .selectAll('dot')
+      .data(artist_list)
+      .join(
+        enter => enter.append('circle')
+      )
+      .transition()
+      .duration(2000)
+      .attr("cx", d => x(d.year))
+      .attr("cy", d => y(d[currentSelection[0].innerHTML]))
+      .attr("r", 10)
+      .attr("fill", function(d){
+      if (d.name == song.name){
+        return '#FFD847' 
+      }
+      return myColor(currentSelection[0].innerHTML)
+    })
 
-          svgScatter
-          .selectAll("circle")
-          .on("mouseover", mouseoverScatter )
-          .on("mousemove", mousemoveScatter )
-          .on("mouseleave", mouseleaveScatter )
-            
+    svgScatter
+      .selectAll("circle")
+      .on("mouseover", mouseoverScatter)
+      .on("mousemove", mousemoveScatter)
+      .on("mouseleave", mouseleaveScatter)
+      
 
-            updateScatterField(currentSelection[0].innerHTML)
-        }
-        //******************************************************END ARTIST SCATTER PLOT*******************************************
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    updateScatterField(currentSelection[0].innerHTML)
+  }
+  //******************************************************END ARTIST SCATTER PLOT*******************************************
+})
+.catch((e) => {
+  console.log(e);
+});
 
-    function transformSongFeatureData(song, featuresOfInterest) {
-      var output = [];
-      featuresOfInterest.forEach((feature) => {
-        var dict = { feature: [feature][0], value: [song[feature]][0] };
-        output.push(dict);
-      });
-      return output;
-    }
+function transformSongFeatureData(song, featuresOfInterest) {
+  var output = [];
+  featuresOfInterest.forEach((feature) => {
+    var dict = { feature: [feature][0], value: [song[feature]][0] };
+    output.push(dict);
+  });
+  return output;
+}
   </script>
 </html>
