@@ -18,7 +18,7 @@
   <style>
     body,
     p {
-      font: 15px helvetica;
+      font: 15px sans-serif;
       background-color: #F0F0F0;
     }
 
@@ -27,17 +27,17 @@
     }
 
     div.tooltip {
-  position: absolute;
-  text-align: left;
-  width: 210px;
-  height: 60px;
-  padding: 2px;
-  font: 12px sans-serif;
-  background: white;
-  border: 0px;
-  border-radius: 8px;
-  pointer-events: none;
-}
+        position: absolute;
+        text-align: left;
+        width: 210px;
+        height: 60px;
+        padding: 2px;
+        font: 12px sans-serif;
+        background: white;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+      }
       /* Remove the navbar's default rounded borders and increase the bottom margin */
       .navbar {
         flex-wrap: initial;
@@ -53,6 +53,21 @@
         margin-bottom: 0;
         background-color: #333333;
         padding: 10px;
+      }
+
+      .container.text-left {
+        background-color: #333333;
+        padding: 10px;
+      }
+
+      .spotify-logo {
+        float: left;
+        padding: 0 5px 0 0;
+      }
+
+      a {
+        color: #1DB954;
+        font-family: sans-serif;
       }
 
       /* Add a gray background color and some padding to the footer */
@@ -83,20 +98,16 @@
   <body>
     <div class="jumbotron">
       <div class="container text-left">
-        <div class = "row">
-          <div class = "col-sm-1">
-            <img src="https://download.logo.wine/logo/Spotify/Spotify-Icon-Logo.wine.png" width = "65px" height = "45px" style = "vertical-align: middle" alt="logo" class="spotify-logo"/>
+        <div class="row">
+          <div class="col-sm-1" style = "padding:0px">
+            <img src="Images/logo_95.png" alt="logo" class="spotify-logo"/>
           </div>
-          <div class = "col-sm=8">
-            <h1 style="font-family:sans-serif;font-size:48px; color: white; font-weight: bold">Spotify w<span style="color: #1DB954">R</span>apped</h1>
-          </div>
+        <div class="col-sm-11">
+          <h1 style="font-family:sans-serif;font-size:48px; color: white; font-weight: bold">Spotify w<span style="color: #1DB954">R</span>apped</h1>
         </div>
-        <div class = "row">
-          <div class = "col-sm-1">
-          </div>
-          <div class = "col-sm-8">
-            <p style="font-family:sans-serif;font-size:16px;color:white;background-color: #333333">Use the graphs to guess whether the song was a hit or flop!</p>
-          </div>
+        <div class="row">
+          <p style="font-family:sans-serif;font-size:16px;color:white; background-color:#333333">Use data to guess whether the song was a hit or flop!</p>
+        </div>
         </div>
       </div>
     </div>
@@ -177,10 +188,10 @@
         </div>
         <div class="row">
           <div class="col-sm-6" style = "text-align: center">
-            <p style = "color: grey; font-size: 10pt"><i>Hover over each audio feature to see its value.</i></p>
+            <p style = "color: grey; font-size: 10pt"><i>Hover over each audio feature to see its value</i></p>
           </div>
           <div class="col-sm-6" style = "text-align: center">
-            <p style = "color: grey; font-size: 10pt"><i>Checkout how this song (in yellow!) compares to others made by the same artist.</i></p>
+            <p style = "color: grey; font-size: 10pt"><i>Check out how this song (in yellow!) compares to others made by the same artist</i></p>
             </div>
           </div>
         <hr>
@@ -202,13 +213,13 @@
     <footer class="container-fluid text-center">
       <div class = "row">
         <div class = "col-sm-12">
-          <h4>Checkout our references!</h4>
+          <h4 style="font-family:sans-serif;font-size:24px; color: white; font-weight: bold">References</h4>
         </div>
       </div>
 
       <div class = "row">
         <div class = "col-sm-4">
-          <a href="https://www.kaggle.com/theoverman/the-spotify-hit-predictor-dataset">Dataset</a>
+          <a href="https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks">Dataset</a>
         </div>
         <div class = "col-sm-4">
           <a href="https://www.d3-graph-gallery.com/graph/line_select.html">Dropdown Template</a>
@@ -216,6 +227,16 @@
         <div class = "col-sm-4">
           <a href="https://github.com/d3/d3-scale-chromatic/blob/master/README.md">Color Scheme</a>
         </div>
+        <div class = "col-sm-4">
+          <a href="https://developer.spotify.com/documentation/general/design-and-branding">Spotify Branding</a>
+        </div>
+        <div class = "col-sm-4">
+          <a href="https://www.d3-graph-gallery.com/graph/scatter_animation_start.html">Scatter Animation</a>
+        </div>
+        <div class = "col-sm-4">
+          <a href="https://www.d3-graph-gallery.com/graph/scatter_tooltip.html">Scatter Animation</a>
+        </div>
+        
       </div>
       
 
@@ -261,14 +282,14 @@
         var nextSongElement = document.getElementById("next");
         nextSongElement.addEventListener("click", () => {
           song = getRandomSong(data);
-          document.getElementById("radialTitle").innerHTML = "Audio Features of song: " + song.name
+          document.getElementById("radialTitle").innerHTML = "Audio Features of Song: " + song.name
           document.getElementById("scatterTitle").innerHTML = "Reference Songs for " + song.artist
           document.getElementById("spotify_link").src = "https://open.spotify.com/embed/track/" + song.id
           updateScatter(song);
           updateCircularBarplot(song);
         });
         console.log(data);
-        document.getElementById("radialTitle").innerHTML = "Audio Features of song: " + song.name
+        document.getElementById("radialTitle").innerHTML = "Audio Features of Song: " + song.name
         document.getElementById("scatterTitle").innerHTML = "Reference Songs for " + song.artist
         document.getElementById("spotify_link").src = "https://open.spotify.com/embed/track/" + song.id
 
