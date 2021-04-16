@@ -10,106 +10,42 @@
 />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 <html>
   <style>
     body,
     p {
       font: 15px sans-serif;
+      background-color: #F0F0F0;
     }
 
     #chart {
       background: white;
     }
 
-    .circularBar {
-      /* fill: mediumaquamarine; */
-      fill: #1db954;
-    }
-
-    .circularBar:hover {
-      /* fill: darkgreen; */
-      fill: #ecebe8;
-    }
-
-    .circularBarTip {
-      line-height: 1;
-      font-weight: bold;
-      padding: 12px;
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      border-radius: 2px;
-    }
-
-    /* Creates a small triangle extender for the tooltip */
-    .circularBarTip:after {
-      box-sizing: border-box;
-      display: inline;
-      font-size: 10px;
-      width: 100%;
-      line-height: 1;
-      color: rgba(0, 0, 0, 0.8);
-      content: "\25BC";
-      position: absolute;
-      text-align: center;
-    }
-
-    /* Style northward tooltips differently */
-    .dcircularBarTip.n:after {
-      margin: -1px 0 0 0;
-      top: 100%;
-      left: 0;
-    }
-
-    div.barTooltip {
-      position: absolute;
-      text-align: center;
-      width: 200px;
-      height: 100px;
-      padding: 2px;
-      font: 12px sans-serif;
-      background: lightsteelblue;
-      border: 0px;
-      border-radius: 8px;
-      pointer-events: none;
-    }
-
     div.tooltip {
-      position: absolute;
-      text-align: center;
-      width: 200px;
-      height: 50px;
-      padding: 2px;
-      font: 12px sans-serif;
-      background: white;
-      border: 0px;
-      border-radius: 8px;
-      pointer-events: none;
-    }
-
-  </style>
-  <head>
-    <title>Spotify Wrapped</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-    />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <style>
+        position: absolute;
+        text-align: left;
+        width: 210px;
+        height: 60px;
+        padding: 2px;
+        font: 12px sans-serif;
+        background: white;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+      }
       /* Remove the navbar's default rounded borders and increase the bottom margin */
       .navbar {
         flex-wrap: initial;
         justify-content: left;
-        background-color: white;
       }
 
       .navbar {
         margin-bottom: 50px;
-        background-color: white;
-        /* border-radius: 0; */
       }
 
       /* Remove the jumbotron's default bottom margin */
@@ -121,10 +57,7 @@
 
       .container.text-left {
         background-color: #333333;
-      }
-
-      .container {
-        background-color: white;
+        padding: 10px;
       }
 
       .spotify-logo {
@@ -133,7 +66,7 @@
       }
 
       a {
-        color: hotpink;
+        color: #1DB954;
         font-family: sans-serif;
       }
 
@@ -145,102 +78,122 @@
         text-align: left;
       }
 
-    </style>
+      .line-break{
+        background: #A9E5AC;
+        width: 200px;
+        height: 5px;
+        margin: 3em auto;
+      }
+
+      /* hr{
+        color: lightgreen;
+      } */
+
+  </style>
+  <head>
+    <title>Spotify Wrapped</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
     <div class="jumbotron">
       <div class="container text-left">
-        <img src="Images/logo_95.png" alt="logo" class="spotify-logo"/>
-        <h1 style="font-family:sans-serif;font-size:48px; color: white; font-weight: bold">Spotify w<span style="color: #1DB954">R</span>apped</h1>
-        <p style="font-family:sans-serif;font-size:16px;color:white">Use data to guess whether the song was a hit or flop!</p>
+        <div class="row">
+          <div class="col-sm-1" style = "padding:0px">
+            <img src="Images/logo_95.png" alt="logo" class="spotify-logo"/>
+          </div>
+        <div class="col-sm-11">
+          <h1 style="font-family:sans-serif;font-size:48px; color: white; font-weight: bold">Spotify w<span style="color: #1DB954">R</span>apped</h1>
+        </div>
+        <div class="row">
+          <p style="font-family:sans-serif;font-size:16px;color:white; background-color:#333333">Use data to guess whether the song was a hit or flop!</p>
+        </div>
+        </div>
       </div>
     </div>
 
       <div class="container">
         <div class="row">
-          <div class="col-sm-8">
-            <h3 style="font-family:sans-serif;font-size:30px;color:black; font-weight: bold">Spotlight: <span id="song-title"></span></h3>
+          <div class="col-sm-12" style = "text-align: center">
+            <h3><span id="song-title"></span></h3>
           </div>
-        <div class="row">
-          <div class = "col-sm-4" style = "padding: 10px;">
-            <h4 style="font-family:sans-serif;font-size:20px;color:#333333"> Guess
+        </div>
+        <div class = "row">
+          <div class = "col-md-6">
+            <span class = "pull-right">
+              <iframe id = "spotify_link" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            </span>
+          </div>
+          <div class = "col-md-6" style = "align-items: center; padding: 10px;">
+            <h4>
               <button
                 type="button"
                 id="hit"
                 class="btn btn-success"
-                style="background-color:#1DB954; outline-color: black"
-                onClick="isHit(true)"
-                style ="width: 100px; height: 50px; font-family:sans-serif; color: white"
+                onClick="isHit(1)"
+                style ="width: 200px; height: auto; font-size: 20pt;
+                margin-left: 10px; margin-bottom: 50px; background-color:#1DB954;"
               >
                 Hit
               </button>
+              <br>
               <button
                 type="button"
                 id="flop"
                 class="btn btn-danger"
-                style="background-color:#1DB954; outline-color: black"
-                onClick="isHit(false)"
-                style ="width: 100px; height: 50px; font-family:sans-serif; color: white"
+                onClick="isHit(0)"
+                style ="width: 200px; height: auto; font-size: 20pt; margin-left: 10px; margin-bottom: 50px;
+                background-color:#ED2939;"
               >
                 Flop
               </button>
+              <br>
+              <button
+                type="button"
+                id="next"
+                class="btn btn-primary"
+                style="width: 200px; height: auto; font-size: 20pt; margin-left: 10px; margin-bottom: 50px;
+                background-color: #105DF1"
+              >
+                Next Song
+              </button>
             </h4>
+            
           </div>
+          <!-- <div class = "col-md-3"></div> -->
         </div>
+        <div class = "row">
+          <div class = "line-break"></div>
         </div>
 
         <div class="row">
-          <div class="col-sm-12">
-            <!-- <h4>
-              Your Guess:
-              <button
-                type="button"
-                id="hit"
-                class="btn btn-success"
-                onClick="isHit(true)"
-              >
-                Hit
-              </button>
-              <button
-                type="button"
-                id="flop"
-                class="btn btn-danger"
-                onClick="isHit(false)"
-              >
-                Flop
-              </button>
-            </h4> -->
+          <div class="col-sm-4">
+          </div>
+          <div class="col-sm-4">
             <div id="result"></div>
-            <button
-              type="button"
-              id="next"
-              class="btn btn-primary"
-              style="margin-bottom: 5px; background-color: #1DB954"
-            >
-              Next Song
-            </button>
-    
-            <br /><br />
-            <!-- <form class="form-inline" style = "color: white;">Search for a song:
-          <input type="email" class="form-control" size="50" placeholder="Song Name">
-          <button type="button" class="btn btn-danger">Search</button>
-        </form> -->
+          </div>
+          <div class="col-sm-4">
           </div>
           </div>
         </div>
-        <!-- <div id="song-search-box" class='input-group input-group-lg'>
-      <input type="text" id="song-search" >
-    </div> -->
 <br>
     <div class="container">
       <div class="row">
         <div class="col-sm-6" style = "text-align: center">
-          <h4 id = "radialTitle">Test Title</h4>
+          <h4 id = "radialTitle"></h4>
         </div>
         <div class="col-sm-6" style = "text-align: center">
-          <h4 id = "scatterTitle">Test Title #2</h4>
+          <h4 id = "scatterTitle"></h4>
           </div>
         </div>
+        <div class="row">
+          <div class="col-sm-6" style = "text-align: center">
+            <p style = "color: grey; font-size: 10pt"><i>Hover over each audio feature to see its value</i></p>
+          </div>
+          <div class="col-sm-6" style = "text-align: center">
+            <p style = "color: grey; font-size: 10pt"><i>Check out how this song (in yellow!) compares to others made by the same artist</i></p>
+            </div>
+          </div>
         <hr>
       <div class="row">
         <div class="col-sm-6">
@@ -255,12 +208,12 @@
     </div>
     <br />
 
-    <br /><br />
+    <br />
 
     <footer class="container-fluid text-center">
       <div class = "row">
-        <div class = "col-sm-1">
-          <h4 style="font-family:sans-serif;font-size:18px; color: white; font-weight: lighter">References</h4>
+        <div class = "col-sm-12">
+          <h4 style="font-family:sans-serif;font-size:24px; color: white; font-weight: bold">References</h4>
         </div>
       </div>
 
@@ -303,24 +256,25 @@
     ];
 
     const FEATURE_DEFINITIONS = {
-      'acousticness': 'A confidence measure between 0 and 1 of whether the track is acoustic.',
-      'danceability': 'How suitable a track is for dancing based on various musical elements.',
-      'energy': 'A perceptual measure of intensity and activity. Energetic tracks are typically fast and loud.',
-      'instrumentalness': 'Whether a track contains no vocals.',
-      'liveness': 'Likelihood that the track was performed live through detecting whether there was audience presence in the recording.',
-      'speechiness': 'The level of speech-like elements (e.g. talk show, audio book, poetry) in the recording.',
-      'valence': 'A measure from 0 to 1 describing the musical positiveness (e.g. happy, cheerful, euphoric) conveyed by a track.'
+      'acousticness': 'Acoustic / non-acoustic',
+      'danceability': 'How suitable a track is for dancing',
+      'energy': 'Intensity and activity; energetic tracks are typically fast and loud',
+      'instrumentalness': 'Vocals / no vocals',
+      'liveness': 'Likelihood that the track was performed live',
+      'speechiness': 'Speech-like elements (e.g. talk show, audio book, poetry) in the recording',
+      'valence': 'Musical positiveness (e.g. happy, cheerful, euphoric) conveyed by a track'
     }
 
     const MARGIN = { top: 40, right: 10, bottom: 50, left: 0 },
-      width = 460 - MARGIN.left - MARGIN.right,
+      width = 500 - MARGIN.left - MARGIN.right,
       height = 460 - MARGIN.top - MARGIN.bottom,
       innerRadius = 90,
       outerRadius = Math.min(width, height) / 2;
 
       var artist_list = [];
 
-      var myColor = d3.scaleOrdinal().domain(FEATURES_OF_INTEREST).range(d3.schemeSet3);
+      // var myColor = d3.scaleOrdinal().domain(FEATURES_OF_INTEREST).range(d3.schemeDark2);
+      var myColor = d3.scaleOrdinal().domain(FEATURES_OF_INTEREST).range(['#FEB9B1', '#242DBD', '#79E6DF', '#F26350', '#FE6C2A', '#C24999', '#8BC64D']);
 
     d3.csv("merged_datasets.csv", d3.autoType)
       .then(function (data) {
@@ -328,19 +282,16 @@
         var nextSongElement = document.getElementById("next");
         nextSongElement.addEventListener("click", () => {
           song = getRandomSong(data);
-          document.getElementById("radialTitle").innerHTML = "Audio Features of song: " + song.name
+          document.getElementById("radialTitle").innerHTML = "Audio Features of Song: " + song.name
           document.getElementById("scatterTitle").innerHTML = "Reference Songs for " + song.artist
+          document.getElementById("spotify_link").src = "https://open.spotify.com/embed/track/" + song.id
           updateScatter(song);
           updateCircularBarplot(song);
         });
         console.log(data);
-        document.getElementById("radialTitle").innerHTML = "Audio Features of song: " + song.name
+        document.getElementById("radialTitle").innerHTML = "Audio Features of Song: " + song.name
         document.getElementById("scatterTitle").innerHTML = "Reference Songs for " + song.artist
-
-        // var song = getRandomSong(data)
-        console.log(song);
-
-        // makeCircularBarplot(song)
+        document.getElementById("spotify_link").src = "https://open.spotify.com/embed/track/" + song.id
 
         songTitles = data.map((d) => d.name);
         console.log(songTitles);
@@ -375,13 +326,12 @@
           .attr("y", (0 - MARGIN.top) * 2)
           .attr("text-anchor", "middle")
           .style("font-size", "16px");
-          // .text(`Audio Features of ${song.name}`);
 
         // Scales
         var xBar = d3
           .scaleBand()
-          .range([0, 2 * Math.PI]) // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
-          .align(0) // This does nothing
+          .range([0, 2 * Math.PI]) 
+          .align(0) 
           .domain(
             transformedData.map(function (d) {
               return d.feature;
@@ -396,12 +346,7 @@
         var tooltipCircle = d3.select("#circularBarplot")
             .append("div")
             .style("opacity", 0)
-            .attr("class", "barTooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "1px")
-            .style("border-radius", "5px")
-            .style("padding", "10px")
+            .attr("class", "tooltip")
 
             var mouseover = function(d) {
               tooltipCircle
@@ -412,31 +357,20 @@
               }
 
   var mousemove = function(d) {
-    // console.log(d3.pointer(event)[0])
-    // console.log(d3.pointer(event)[1])
-    // console.log(d)
     var currentFeature = d.srcElement.__data__.feature
     tooltipCircle
-      .html(`<strong>${currentFeature}</strong>: ${FEATURE_DEFINITIONS[currentFeature]} <br><strong>Feature value</strong>: <span style='color:red;'>${d.srcElement.__data__.value}</span>`)
-      // .style("left", d3.select(this).attr("cx") + "px")     
-      // .style("top", d3.select(this).attr("cy") + "px");
-      // .style("left", (d3.pointer(event)[1] - 100) + "px")     
-      // .style("top", (d3.pointer(event)[0] - 100) + "px");
+      .html(`<strong>${currentFeature}</strong>: ${FEATURE_DEFINITIONS[currentFeature]} <br><strong>Feature value</strong>: <span>${d.srcElement.__data__.value}</span>`)
       .style("left", (d.clientX - d.layerX + d.movementX) + "px")
       .style("top", (d.clientY - d.layerY + d.movementY) + "px")
-      // .style("left", (d.movementX) + "px")
-      // .style("top", (d.movementY) + "px")
-      // .style("left")
-      // .style("top")
   }
   var mouseleave = function(d) {
     tooltipCircle
       .transition()
-      .duration(150)
+      .duration(200)
       .style("opacity", 0)
       d3.select(this)
-      .style("stroke", "none")
-      .style("opacity", 0.8)
+      .style("stroke", "black")
+      .style("opacity", 1)
   }
 
         // Add the bars
@@ -609,18 +543,13 @@
 
         var x = d3
           .scaleLinear()
-          .domain(
-            d3.extent(data, function (d) {
-              return d.year;
-            })
-          )
-          .range([MARGIN.left, width - MARGIN.right]);
+          .domain(d3.extent(data, (d) => d.year))
+          .range([MARGIN.left, width - 3.5 * MARGIN.right])
 
         svgScatter
           .append("g")
           .attr("transform", `translate(0, ${height})`)
-          .call(d3.axisBottom(x))
-          // .attr("opacity", "0");
+          .call(d3.axisBottom(x).tickFormat((year, i) => year.toString()))
 
         // Add Y axis
         var y = d3.scaleLinear().domain([0, 1]).range([height, 0]);
@@ -631,11 +560,6 @@
             .append("div")
             .style("opacity", 0)
             .attr("class", "tooltip")
-            // .style("background-color", "white")
-            // .style("border", "solid")
-            // .style("border-width", "1px")
-            // .style("border-radius", "5px")
-            // .style("padding", "10px")
 
             var mouseoverScatter = function(d) {
               tooltip
@@ -643,15 +567,14 @@
               d3.select(this)
               .style("stroke", "black")
               .style("opacity", 1)
-              .style('display', 'block')
               }
 
   var mousemoveScatter = function(d) {
     tooltip
-      .html('Artist: ' + d.srcElement.__data__.artist + "<br>" + 'Song: ' + d.srcElement.__data__.name)
-      .style("left", (d.offsetX) + "px")
-      .style("top", (d.offsetY) + "px")
-      .style('display', 'block');
+    .html(`<strong>Artist</strong>: ${d.srcElement.__data__.artist} <br><strong>Song</strong>: <span>${d.srcElement.__data__.name}</span>
+    <br><strong>Year</strong>: ${d.srcElement.__data__.year}`)
+      .style("left", (d.offsetX + 50) + "px")
+      .style("top", (d.offsetY + 50) + "px")
   }
   var mouseleaveScatter = function(d) {
     tooltip
@@ -661,7 +584,6 @@
       d3.select(this)
               .style("stroke", "black")
               .style("opacity", 1)
-              .style('display', 'block')
   }
 
   // var shape = d3.scaleOrdinal(artist_list.map(d => d.mode), d3.symbols.map(s => d3.symbol().type(s)()))
@@ -681,34 +603,15 @@
             return y(d.acousticness);
           })
           .attr("r", 10)
-          // .style("fill", "#69b3a2")
-    //       .on("mouseover", function(event,d) {
-    //    tooltip.transition()
-    //      .duration(200)
-    //      .style("opacity", .9);
-    //    tooltip.html(d.artist + "<br/>" + d.name)
-    //     //  .style("left", (event.pageX) + "px")
-    //     //  .style("top", (event.pageY) + "px");
-    //    })
-    //  .on("mouseout", function(d) {
-    //    tooltip.transition()
-    //      .duration(500)
-    //      .style("opacity", 0);
-    //    })
           .on("mouseover", mouseoverScatter )
           .on("mousemove", mousemoveScatter )
           .on("mouseleave", mouseleaveScatter )
-          .attr("fill", function(d){return myColor("acousticness") })
-          // .attr("d", symbol.type(function(d){
-    // if(d.name == song.name){ console.log(d.name + " " + song.name); return d3.symbolCross
-    // } else if (d.name == "Bournville"){ return d3.symbolDiamond
-    // } else if (d.name == "Dolfin"){ return d3.symbolSquare
-    // } else if (d.name == "Hershey"){ return d3.symbolStar
-    // } else if (d.name == "Galaxy"){ return d3.symbolTriangle
-    // } else if (d.name == "Dairy Milk"){ return d3.symbolCircle
-// }}))
-          // .attr("d", function(d) {console.log(d.mode); return shape(d.mode)});
-
+          .attr("fill", function(d){
+            if (d.name == song.name){
+              return '#FFD847' }
+              else{
+                return myColor("acousticness")
+              }})
 
         // new X axis
         x.domain(
@@ -752,7 +655,12 @@
               return y(d[selectedOption]);
             })
             .attr("r", 10)
-            .attr("fill", function(d){return myColor(selectedOption) })
+            .attr("fill", function(d){
+            if (d.name == song.name){
+              return '#FFD847' }
+              else{
+                return myColor(selectedOption)
+              }})
         }
 
         function updateScatter(song) {
@@ -782,7 +690,19 @@
               return y(d[currentSelection[0].innerHTML]);
             })
             .attr("r", 10)
-            .attr("fill", function(d){return myColor(currentSelection[0].innerHTML) })
+            .attr("fill", function(d){
+            if (d.name == song.name){
+              return '#FFD847' }
+              else{
+                return myColor(currentSelection[0].innerHTML)
+              }})
+
+          svgScatter
+          .selectAll("circle")
+          .on("mouseover", mouseoverScatter )
+          .on("mousemove", mousemoveScatter )
+          .on("mouseleave", mouseleaveScatter )
+            
 
             updateScatterField(currentSelection[0].innerHTML)
         }
