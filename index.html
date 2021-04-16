@@ -60,10 +60,10 @@
         padding: 10px;
       }
 
-      .spotify-logo {
+      /* .spotify-logo {
         float: left;
         padding: 0 5px 0 0;
-      }
+      } */
 
       a {
         color: #1DB954;
@@ -85,9 +85,12 @@
         margin: 3em auto;
       }
 
-      /* hr{
-        color: lightgreen;
-      } */
+      .center {
+        display: block;
+        margin-left: auto;
+        margin-right: 0px;
+        width: 100%;
+      }
 
   </style>
   <head>
@@ -99,15 +102,18 @@
     <div class="jumbotron">
       <div class="container text-left">
         <div class="row">
-          <div class="col-sm-1" style = "padding:0px">
-            <img src="Images/logo_95.png" alt="logo" class="spotify-logo"/>
+          <div class="col-sm-1">
+            <img src="Images/logo_95.png" alt="logo" class = "center"/>
           </div>
         <div class="col-sm-11">
           <h1 style="font-family:sans-serif;font-size:48px; color: white; font-weight: bold">Spotify w<span style="color: #1DB954">R</span>apped</h1>
         </div>
-        <div class="row">
-          <p style="font-family:sans-serif;font-size:16px;color:white; background-color:#333333">Use data to guess whether the song was a hit or flop!</p>
         </div>
+        <div class="row">
+          <div class = "col-sm-1"></div>
+          <div class = "col-sm-11">
+            <p style="font-family:sans-serif;font-size:16px;color:white; background-color:#333333">Use data to guess whether the song was a hit or flop!</p>
+          </div>
         </div>
       </div>
     </div>
@@ -219,7 +225,8 @@
 
       <div class = "row">
         <div class = "col-sm-4">
-          <a href="https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks">Dataset</a>
+          <a href="https://www.kaggle.com/yamaerenay/spotify-dataset-19212020-160k-tracks">Dataset Song / </a>
+          <a href="https://www.kaggle.com/theoverman/the-spotify-hit-predictor-dataset">Dataset Hits</a>
         </div>
         <div class = "col-sm-4">
           <a href="https://www.d3-graph-gallery.com/graph/line_select.html">Dropdown Template</a>
@@ -360,8 +367,10 @@
     var currentFeature = d.srcElement.__data__.feature
     tooltipCircle
       .html(`<strong>${currentFeature}</strong>: ${FEATURE_DEFINITIONS[currentFeature]} <br><strong>Feature value</strong>: <span>${d.srcElement.__data__.value}</span>`)
-      .style("left", (d.clientX - d.layerX + d.movementX) + "px")
-      .style("top", (d.clientY - d.layerY + d.movementY) + "px")
+      // .style("left", (d.clientX - d.layerX + d.movementX) + "px")
+      // .style("top", (d.clientY - d.layerY + d.movementY) + "px")
+      .style("left", (d.offsetX + 50) + "px")
+      .style("top", (d.offsetY + 50) + "px")
   }
   var mouseleave = function(d) {
     tooltipCircle
