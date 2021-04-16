@@ -25,6 +25,8 @@ Open http://0.0.0.0:8000/ in your browser to see the dashboard or alternatively,
 
 When you view the dashboard, you'll see a random song and its corresponding artist appear on the top of the screen. You'll also see two graphs to help guide your decision on whether the song is a hit or a flop. Note songs are identified as hits or flops based on the [Spotify Hit Predictor Dataset (1960 - 2019)](https://www.kaggle.com/theoverman/the-spotify-hit-predictor-dataset) obtained from Kaggle.
 
+_Note: If you only see one dot in the scatter plot, *it’s not a mistake!* The artist only has one song in the dataset._
+
 ### Audio Features: Radial barplot of the randomized song's audio features
 
 This plot shows various audio features of the randomized song. You'll see the following audio features ranging from 0.0 to 1.0, which are taken directly from [Spotify API](https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-audio-features):
@@ -108,6 +110,14 @@ Using R Studio, we decided to combine the hit predictor and larger Spotify datas
 [The Spotify Hit Predictor Dataset (1960-2019)](https://www.kaggle.com/theoverman/the-spotify-hit-predictor-dataset) - 41,106 rows, 19 columns
 
 In order to merge properly, we had to clean up the datasets individually (e.g. formatting column values, removing duplicated information). After the initial cleaning, we combined the datasets to get a final dataset of 14,987 rows. We also double checked various field's histograms to ensure the data was diverse and representative. We spot checked for accuracy to ensure the datasets were joined correctly and that the data was spread sufficiently throughout each decade.
+
+### Dividing Up Work
+
+Taking learnings from the streamgraph journey, we decided to split up the development work:
+
+- Christina: Scatter plot and resident tooltip expert
+- Elizabeth: Circular barplot, hit/flop/next song functionality
+- Sravani: UI design, write up, data cleansing
 
 After several working sessions and iterations, we finally got the dashboard to be fully functional! Over the past few weeks, we collectively spent around 105 hours. This effort was necessary likely because no members of our team had prior experience with d3 or formal frontend development experience and so we experienced a significant learning curve.
 
