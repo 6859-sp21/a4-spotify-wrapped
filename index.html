@@ -19,6 +19,7 @@
     body,
     p {
       font: 15px helvetica;
+      /* background-color: lightgray */
     }
 
     #chart {
@@ -61,6 +62,13 @@
         color: white;
         text-align: left;
       }
+
+      .line-break{
+        background: #A9E5AC;
+        width: 200px;
+        height: 5px;
+        margin: 3em auto;
+      }
   </style>
   <head>
     <title>Spotify Wrapped</title>
@@ -87,49 +95,61 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-12" style = "text-align: center">
-            <h3>Spotlight: <span id="song-title"></span></h3>
+            <h3><span id="song-title"></span></h3>
           </div>
         </div>
-        <div class = "row" style = "align-content: center;">
-          <div class = "col-md-5"></div>
-          <div class = "col-md-4" style = "align-items: center; padding: 10px;">
+        <div class = "row">
+          <div class = "col-md-6">
+            <span class = "pull-right">
+              <iframe id = "spotify_link" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            </span>
+          </div>
+          <div class = "col-md-6" style = "align-items: center; padding: 10px;">
             <h4>
               <button
                 type="button"
                 id="hit"
                 class="btn btn-success"
                 onClick="isHit(true)"
-                style ="width: 200px; height: auto; font-size: 24pt"
+                style ="width: 200px; height: auto; font-size: 20pt;
+                margin-left: 10px; margin-bottom: 50px; background-color:#1DB954;"
               >
                 Hit
               </button>
+              <br>
               <button
                 type="button"
                 id="flop"
                 class="btn btn-danger"
                 onClick="isHit(false)"
-                style ="width: 200px; height: auto; font-size: 24pt"
+                style ="width: 200px; height: auto; font-size: 20pt; margin-left: 10px; margin-bottom: 50px;
+                background-color:#ED2939;"
               >
                 Flop
               </button>
+              <br>
+              <button
+                type="button"
+                id="next"
+                class="btn btn-primary"
+                style="width: 200px; height: auto; font-size: 20pt; margin-left: 10px; margin-bottom: 50px;
+                background-color: #105DF1"
+              >
+                Next Song
+              </button>
             </h4>
+            
           </div>
-          <div class = "col-md-3"></div>
+          <!-- <div class = "col-md-3"></div> -->
         </div>
 
         <div class="row">
           <div class="col-sm-12">
             <div id="result"></div>
-            <button
-              type="button"
-              id="next"
-              class="btn btn-primary"
-              style="margin-bottom: 5px"
-            >
-              Next Song
-            </button>
+
+            <div class = "line-break"></div>
     
-            <br /><br />
+            <br />
           </div>
           </div>
         </div>
@@ -165,7 +185,7 @@
     </div>
     <br />
 
-    <br /><br />
+    <br />
 
     <footer class="container-fluid text-center">
       <div class = "row">
@@ -231,12 +251,14 @@
           song = getRandomSong(data);
           document.getElementById("radialTitle").innerHTML = "Audio Features of song: " + song.name
           document.getElementById("scatterTitle").innerHTML = "Reference Songs for " + song.artist
+          document.getElementById("spotify_link").src = "https://open.spotify.com/embed/track/" + song.id
           updateScatter(song);
           updateCircularBarplot(song);
         });
         console.log(data);
         document.getElementById("radialTitle").innerHTML = "Audio Features of song: " + song.name
         document.getElementById("scatterTitle").innerHTML = "Reference Songs for " + song.artist
+        document.getElementById("spotify_link").src = "https://open.spotify.com/embed/track/" + song.id
 
         songTitles = data.map((d) => d.name);
         console.log(songTitles);

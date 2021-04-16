@@ -42,7 +42,7 @@ function isHit(userInput) {
   const resultElement = document.getElementById("result");
   if (userInput == !!correctAns) {
     resultElement.innerHTML = `<div class="alert alert-info" role="alert">
-        Congratualtions! You are correct! "${songName}" by ${artist} was a hit!
+        Congratulations! You are correct! "${songName}" by ${artist} was a hit!
       </div>`;
   } else {
     let hitOrFlopStr = "flop";
@@ -50,7 +50,7 @@ function isHit(userInput) {
       hitOrFlopStr = "hit";
     }
     resultElement.innerHTML = `<div class="alert alert-warning" role="alert">
-        "${songName}" was actually a ${hitOrFlopStr}
+        "${songName}" was actually a ${hitOrFlopStr}.
       </div>`;
   }
 }
